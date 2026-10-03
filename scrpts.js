@@ -1,5 +1,5 @@
 /* =========================================================
-   J-I BIENES RAÍCES
+   JI BIENES RAÍCES
    SISTEMA DE PROPIEDADES
    ========================================================= */
 
@@ -8,7 +8,7 @@
    CONFIGURACIÓN
    ========================================================= */
 
-// Número de WhatsApp de J-I Bienes Raíces
+// Número de WhatsApp de JI Bienes Raíces
 const whatsappNumber = "525583182642";
 
 
