@@ -1,0 +1,2093 @@
+/* =========================================================
+   JI BIENES RAÍCES
+   PANEL DE ADMINISTRACIÓN
+   Identidad visual:
+   Azul marino + Dorado + Blanco
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+
+    --navy: #19315d;
+    --navy-dark: #102344;
+    --navy-light: #294775;
+
+    --gold: #9a8a4a;
+    --gold-dark: #7d6f38;
+    --gold-light: #b3a467;
+
+    --white: #ffffff;
+
+    --background: #f7f7f5;
+    --surface: #ffffff;
+    --surface-soft: #f4f5f7;
+
+    --text: #26303d;
+    --text-light: #667085;
+
+    --border: rgba(25, 49, 93, 0.12);
+
+    --green: #25d366;
+    --red: #b42318;
+    --red-soft: #fff1f0;
+
+    --shadow:
+        0 10px 30px rgba(16, 35, 68, 0.10);
+
+    --shadow-hover:
+        0 18px 40px rgba(16, 35, 68, 0.16);
+
+    --radius: 16px;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            rgba(247, 247, 245, 0.96),
+            rgba(247, 247, 245, 0.96)
+        ),
+        url("images/1.jpeg")
+        center top / 500px auto
+        no-repeat fixed;
+
+    color: var(--text);
+
+    min-height: 100vh;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.admin-header {
+
+    position: relative;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 25px;
+
+    padding:
+        28px
+        35px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--navy-dark),
+            var(--navy)
+        );
+
+    border-bottom:
+        4px solid var(--gold);
+
+    overflow: hidden;
+}
+
+
+/* Decoración */
+
+.admin-header::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    right: -65px;
+    top: -85px;
+
+    border:
+        2px solid
+        rgba(154, 138, 74, 0.35);
+
+    transform:
+        rotate(45deg);
+
+    pointer-events: none;
+}
+
+
+/* Marca */
+
+.admin-brand {
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+.admin-brand h1 {
+
+    font-size:
+        clamp(1.6rem, 3vw, 2.3rem);
+
+    font-weight: 600;
+
+    letter-spacing: 0.5px;
+
+    margin-bottom: 5px;
+}
+
+
+.admin-brand h1 span {
+
+    color:
+        var(--gold-light);
+}
+
+
+.admin-brand p {
+
+    color:
+        rgba(255, 255, 255, 0.78);
+
+    font-size:
+        0.95rem;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.logout-button {
+
+    position: relative;
+
+    z-index: 2;
+
+    padding:
+        11px
+        18px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.25);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.logout-button:hover {
+
+    background:
+        var(--gold-dark);
+
+    border-color:
+        var(--gold-light);
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+main {
+
+    width: 100%;
+
+    max-width: 1250px;
+
+    margin:
+        0 auto;
+
+    padding:
+        55px
+        25px
+        100px;
+}
+
+
+/* =========================================================
+   ADMIN SECTION
+   ========================================================= */
+
+.admin-section {
+
+    background:
+        rgba(255, 255, 255, 0.96);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        20px;
+
+    padding:
+        35px;
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.section-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap: 25px;
+
+    margin-bottom:
+        35px;
+
+    padding-bottom:
+        25px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.section-label {
+
+    color:
+        var(--gold-dark);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    margin-bottom:
+        7px;
+}
+
+
+.section-header h2 {
+
+    color:
+        var(--navy);
+
+    font-size:
+        clamp(1.8rem, 4vw, 2.4rem);
+
+    font-weight:
+        600;
+
+    margin-bottom:
+        7px;
+}
+
+
+.section-description {
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.95rem;
+}
+
+
+/* =========================================================
+   AGREGAR PROPIEDAD
+   ========================================================= */
+
+.add-property-button {
+
+    flex-shrink: 0;
+
+    display: inline-flex;
+
+    align-items:
+        center;
+
+    gap: 8px;
+
+    padding:
+        13px
+        19px;
+
+    border:
+        1px solid
+        var(--gold);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--navy);
+
+    color:
+        white;
+
+    font-size:
+        0.95rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.add-property-button span {
+
+    color:
+        var(--gold-light);
+
+    font-size:
+        1.3rem;
+
+    line-height:
+        1;
+}
+
+
+.add-property-button:hover {
+
+    background:
+        var(--navy-dark);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(16, 35, 68, 0.20);
+}
+
+
+/* =========================================================
+   FORMULARIO
+   ========================================================= */
+
+.property-form-container {
+
+    display: none;
+
+    margin-bottom:
+        40px;
+
+    padding:
+        30px;
+
+    background:
+        var(--surface-soft);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-top:
+        4px solid
+        var(--gold);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        0 5px 20px
+        rgba(16, 35, 68, 0.06);
+}
+
+
+/* =========================================================
+   HEADER DEL FORMULARIO
+   ========================================================= */
+
+.form-header {
+
+    margin-bottom:
+        30px;
+
+    padding-bottom:
+        20px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.form-label {
+
+    color:
+        var(--gold-dark);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    margin-bottom:
+        6px;
+}
+
+
+.property-form-container h2 {
+
+    color:
+        var(--navy);
+
+    font-size:
+        1.7rem;
+
+    font-weight:
+        600;
+}
+
+
+/* =========================================================
+   SECCIONES DEL FORMULARIO
+   ========================================================= */
+
+.form-section {
+
+    margin-bottom:
+        30px;
+
+    padding-bottom:
+        25px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.form-section:last-of-type {
+
+    border-bottom:
+        none;
+}
+
+
+.form-section h3 {
+
+    color:
+        var(--navy);
+
+    font-size:
+        1.1rem;
+
+    margin-bottom:
+        18px;
+}
+
+
+.form-help {
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.9rem;
+
+    margin-bottom:
+        18px;
+}
+
+
+/* =========================================================
+   GRID DEL FORMULARIO
+   ========================================================= */
+
+.form-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        20px;
+}
+
+
+.full-width {
+
+    grid-column:
+        1 / -1;
+}
+
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+#property-form label {
+
+    display:
+        grid;
+
+    gap:
+        7px;
+
+    color:
+        var(--text);
+
+    font-weight:
+        600;
+
+    font-size:
+        0.9rem;
+}
+
+
+#property-form label span {
+
+    color:
+        var(--text);
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+#property-form input[type="text"],
+#property-form input[type="number"],
+#property-form textarea {
+
+    width:
+        100%;
+
+    padding:
+        12px
+        14px;
+
+    border:
+        1px solid
+        #d5d9e0;
+
+    border-radius:
+        9px;
+
+    background:
+        white;
+
+    color:
+        var(--text);
+
+    font:
+        inherit;
+
+    outline:
+        none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+#property-form textarea {
+
+    resize:
+        vertical;
+
+    min-height:
+        120px;
+}
+
+
+#property-form input::placeholder,
+#property-form textarea::placeholder {
+
+    color:
+        #98a2b3;
+}
+
+
+#property-form input[type="text"]:focus,
+#property-form input[type="number"]:focus,
+#property-form textarea:focus {
+
+    border-color:
+        var(--gold);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(154, 138, 74, 0.12);
+}
+
+
+/* =========================================================
+   CHECKBOXES
+   ========================================================= */
+
+.checkbox-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        12px;
+}
+
+
+.checkbox-option {
+
+    display:
+        flex !important;
+
+    grid-template-columns:
+        none !important;
+
+    align-items:
+        flex-start;
+
+    gap:
+        12px;
+
+    padding:
+        15px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        10px;
+
+    background:
+        white;
+
+    cursor:
+        pointer;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.checkbox-option:hover {
+
+    border-color:
+        rgba(154, 138, 74, 0.55);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.checkbox-option input[type="checkbox"] {
+
+    width:
+        18px !important;
+
+    height:
+        18px;
+
+    margin-top:
+        2px;
+
+    accent-color:
+        var(--gold-dark);
+
+    cursor:
+        pointer;
+}
+
+
+.checkbox-option span {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px;
+}
+
+
+.checkbox-option strong {
+
+    color:
+        var(--navy);
+
+    font-size:
+        0.9rem;
+}
+
+
+.checkbox-option small {
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        400;
+}
+
+
+/* =========================================================
+   FOTOGRAFÍAS
+   ========================================================= */
+
+.upload-area {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    padding:
+        20px;
+
+    border:
+        2px dashed
+        rgba(25, 49, 93, 0.18);
+
+    border-radius:
+        12px;
+
+    background:
+        white;
+}
+
+
+/* Ocultar input original */
+
+#property-images {
+
+    position:
+        absolute;
+
+    width:
+        1px;
+
+    height:
+        1px;
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+}
+
+
+.file-select-button {
+
+    display:
+        inline-flex !important;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        11px
+        17px;
+
+    border:
+        1px solid
+        var(--gold);
+
+    border-radius:
+        8px;
+
+    background:
+        white;
+
+    color:
+        var(--navy);
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.file-select-button:hover {
+
+    background:
+        var(--navy);
+
+    color:
+        white;
+}
+
+
+.upload-images-button {
+
+    padding:
+        11px
+        17px;
+
+    border:
+        none;
+
+    border-radius:
+        8px;
+
+    background:
+        var(--navy);
+
+    color:
+        white;
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.upload-images-button:hover {
+
+    background:
+        var(--navy-dark);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.form-help + .upload-area {
+
+    margin-top:
+        5px;
+}
+
+
+.upload-message {
+
+    min-height:
+        22px;
+
+    margin-top:
+        10px;
+
+    color:
+        var(--gold-dark);
+
+    font-size:
+        0.88rem;
+
+    font-weight:
+        600;
+}
+
+
+/* =========================================================
+   PREVISUALIZACIÓN DE FOTOGRAFÍAS
+   ========================================================= */
+
+#property-images-preview {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(150px, 1fr)
+        );
+
+    gap:
+        15px;
+
+    margin-top:
+        18px;
+}
+
+
+.image-preview-item {
+
+    overflow:
+        hidden;
+
+    background:
+        white;
+
+    padding:
+        8px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        11px;
+
+    box-shadow:
+        0 4px 12px
+        rgba(16, 35, 68, 0.06);
+}
+
+
+.image-preview-item img {
+
+    display:
+        block;
+
+    width:
+        100%;
+
+    height:
+        120px;
+
+    object-fit:
+        cover;
+
+    border-radius:
+        7px;
+}
+
+
+.image-preview-item p {
+
+    margin-top:
+        8px;
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.75rem;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   ACCIONES DEL FORMULARIO
+   ========================================================= */
+
+.form-actions {
+
+    display:
+        flex;
+
+    gap:
+        12px;
+
+    padding-top:
+        5px;
+}
+
+
+.save-property-button,
+.cancel-property-button {
+
+    padding:
+        13px
+        20px;
+
+    border:
+        none;
+
+    border-radius:
+        9px;
+
+    font-size:
+        0.95rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.save-property-button {
+
+    background:
+        var(--navy);
+
+    color:
+        white;
+}
+
+
+.save-property-button:hover {
+
+    background:
+        var(--navy-dark);
+
+    transform:
+        translateY(-2px);
+}
+
+
+.cancel-property-button {
+
+    background:
+        #e5e7eb;
+
+    color:
+        var(--text);
+}
+
+
+.cancel-property-button:hover {
+
+    background:
+        #d1d5db;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =========================================================
+   MENSAJES
+   ========================================================= */
+
+.form-message {
+
+    margin-top:
+        15px;
+
+    color:
+        var(--gold-dark);
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        600;
+}
+
+
+/* =========================================================
+   LISTA DE PROPIEDADES
+   ========================================================= */
+
+.properties-list-section {
+
+    margin-top:
+        50px;
+}
+
+
+.properties-list-header {
+
+    margin-bottom:
+        25px;
+
+    padding-bottom:
+        18px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.properties-list-header h2 {
+
+    color:
+        var(--navy);
+
+    font-size:
+        1.7rem;
+
+    font-weight:
+        600;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+#property-list {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(330px, 1fr)
+        );
+
+    gap:
+        25px;
+}
+
+
+/* =========================================================
+   TARJETA DE PROPIEDAD
+   ========================================================= */
+
+.admin-property-card {
+
+    overflow:
+        hidden;
+
+    background:
+        white;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--shadow);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.admin-property-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        var(--shadow-hover);
+
+    border-color:
+        rgba(154, 138, 74, 0.4);
+}
+
+
+/* =========================================================
+   INFORMACIÓN DE PROPIEDAD
+   ========================================================= */
+
+.admin-property-info {
+
+    padding:
+        23px;
+}
+
+
+.admin-property-header {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        15px;
+
+    margin-bottom:
+        15px;
+}
+
+
+.admin-property-header h3 {
+
+    color:
+        var(--navy);
+
+    font-size:
+        1.2rem;
+
+    margin-bottom:
+        5px;
+}
+
+
+.admin-property-location {
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.85rem;
+}
+
+
+.admin-property-price {
+
+    flex-shrink:
+        0;
+
+    color:
+        var(--gold-dark);
+
+    font-size:
+        1.15rem;
+
+    font-weight:
+        800;
+
+    text-align:
+        right;
+}
+
+
+/* =========================================================
+   DETALLES
+   ========================================================= */
+
+.admin-property-details {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+
+    margin-bottom:
+        15px;
+}
+
+
+.admin-property-details span {
+
+    padding:
+        6px
+        9px;
+
+    border-radius:
+        6px;
+
+    background:
+        var(--surface-soft);
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.8rem;
+}
+
+
+/* =========================================================
+   DESCRIPCIÓN
+   ========================================================= */
+
+.admin-property-description {
+
+    padding-top:
+        14px;
+
+    margin-top:
+        14px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.88rem;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   SERVICIOS
+   ========================================================= */
+
+.admin-property-services {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        7px;
+
+    margin-top:
+        18px;
+}
+
+
+.admin-property-services span {
+
+    padding:
+        5px
+        8px;
+
+    border-radius:
+        6px;
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        700;
+}
+
+
+.service-active {
+
+    background:
+        rgba(37, 211, 102, 0.10);
+
+    color:
+        #16803d;
+}
+
+
+.service-inactive {
+
+    background:
+        #f1f2f4;
+
+    color:
+        #7b8492;
+}
+
+
+.service-warning {
+
+    background:
+        #fff4df;
+
+    color:
+        #9a6700;
+}
+
+
+/* =========================================================
+   GALERÍA
+   ========================================================= */
+
+.property-image-gallery {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(135px, 1fr)
+        );
+
+    gap:
+        10px;
+
+    padding:
+        0 23px 20px;
+}
+
+
+.property-image-item {
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        10px;
+
+    background:
+        var(--surface-soft);
+}
+
+
+.property-image-item img {
+
+    display:
+        block;
+
+    width:
+        100%;
+
+    height:
+        105px;
+
+    object-fit:
+        cover;
+}
+
+
+/* =========================================================
+   ACCIONES DE IMAGEN
+   ========================================================= */
+
+.image-actions {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr;
+
+    gap:
+        5px;
+
+    padding:
+        7px;
+}
+
+
+.primary-image-button,
+.delete-image-button {
+
+    width:
+        100%;
+
+    padding:
+        7px
+        6px;
+
+    border:
+        none;
+
+    border-radius:
+        6px;
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.primary-image-button {
+
+    background:
+        rgba(154, 138, 74, 0.14);
+
+    color:
+        var(--gold-dark);
+}
+
+
+.delete-image-button {
+
+    background:
+        var(--red-soft);
+
+    color:
+        var(--red);
+}
+
+
+.primary-image-button:hover,
+.delete-image-button:hover {
+
+    opacity:
+        0.8;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   SIN FOTOGRAFÍAS
+   ========================================================= */
+
+.no-property-images {
+
+    margin:
+        0 23px 20px;
+
+    padding:
+        20px;
+
+    border:
+        1px dashed
+        var(--border);
+
+    border-radius:
+        10px;
+
+    background:
+        var(--surface-soft);
+
+    text-align:
+        center;
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.85rem;
+}
+
+
+/* =========================================================
+   ACCIONES DE PROPIEDAD
+   ========================================================= */
+
+.property-actions {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        10px;
+
+    padding:
+        18px
+        23px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    background:
+        #fafafa;
+}
+
+
+.edit-property-button,
+.delete-property-button {
+
+    padding:
+        11px
+        12px;
+
+    border:
+        none;
+
+    border-radius:
+        8px;
+
+    font-size:
+        0.85rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.edit-property-button {
+
+    background:
+        var(--navy);
+
+    color:
+        white;
+}
+
+
+.delete-property-button {
+
+    background:
+        var(--red-soft);
+
+    color:
+        var(--red);
+}
+
+
+.edit-property-button:hover,
+.delete-property-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    opacity:
+        0.9;
+}
+
+
+/* =========================================================
+   SIN PROPIEDADES
+   ========================================================= */
+
+.no-properties {
+
+    grid-column:
+        1 / -1;
+
+    padding:
+        50px
+        25px;
+
+    border:
+        1px dashed
+        var(--border);
+
+    border-radius:
+        var(--radius);
+
+    background:
+        var(--surface-soft);
+
+    text-align:
+        center;
+}
+
+
+.no-properties h3 {
+
+    color:
+        var(--navy);
+
+    margin-bottom:
+        8px;
+}
+
+
+.no-properties p {
+
+    color:
+        var(--text-light);
+
+    font-size:
+        0.9rem;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-properties {
+
+    grid-column:
+        1 / -1;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        12px;
+
+    padding:
+        50px;
+
+    color:
+        var(--text-light);
+}
+
+
+.loading-spinner {
+
+    width:
+        32px;
+
+    height:
+        32px;
+
+    border:
+        3px solid
+        rgba(25, 49, 93, 0.15);
+
+    border-top-color:
+        var(--gold);
+
+    border-radius:
+        50%;
+
+    animation:
+        spin 0.8s linear infinite;
+}
+
+
+@keyframes spin {
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    main {
+
+        padding:
+            40px
+            20px
+            80px;
+    }
+
+
+    .admin-section {
+
+        padding:
+            25px;
+    }
+
+
+    .section-header {
+
+        align-items:
+            flex-start;
+    }
+
+
+    #property-list {
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(290px, 1fr)
+            );
+    }
+
+}
+
+
+/* =========================================================
+   TABLET / MÓVIL
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .admin-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        padding:
+            25px
+            20px;
+    }
+
+
+    .logout-button {
+
+        width:
+            100%;
+    }
+
+
+    main {
+
+        padding:
+            30px
+            12px
+            80px;
+    }
+
+
+    .admin-section {
+
+        padding:
+            20px;
+
+        border-radius:
+            15px;
+    }
+
+
+    .section-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+    }
+
+
+    .add-property-button {
+
+        justify-content:
+            center;
+
+        width:
+            100%;
+    }
+
+
+    .property-form-container {
+
+        padding:
+            20px;
+    }
+
+
+    .form-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .full-width {
+
+        grid-column:
+            auto;
+    }
+
+
+    .checkbox-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .form-actions {
+
+        flex-direction:
+            column;
+    }
+
+
+    .save-property-button,
+    .cancel-property-button {
+
+        width:
+            100%;
+    }
+
+
+    #property-list {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .admin-property-header {
+
+        flex-direction:
+            column;
+    }
+
+
+    .admin-property-price {
+
+        text-align:
+            left;
+    }
+
+
+    .property-actions {
+
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+/* =========================================================
+   MÓVIL PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .admin-brand h1 {
+
+        font-size:
+            1.5rem;
+    }
+
+
+    .admin-section {
+
+        padding:
+            16px;
+    }
+
+
+    .property-form-container {
+
+        padding:
+            16px;
+    }
+
+
+    .property-image-gallery {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        padding-left:
+            16px;
+
+        padding-right:
+            16px;
+    }
+
+
+    .no-property-images {
+
+        margin-left:
+            16px;
+
+        margin-right:
+            16px;
+    }
+
+
+    .property-actions {
+
+        padding-left:
+            16px;
+
+        padding-right:
+            16px;
+    }
+
+}
