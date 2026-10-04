@@ -1,5 +1,4 @@
 const propertyList = document.getElementById("property-list");
-const propertyList = document.getElementById("property-list");
 const addPropertyButton = document.getElementById("add-property-button");
 const cancelPropertyButton = document.getElementById("cancel-property-button");
 const propertyFormContainer = document.getElementById("property-form-container");
