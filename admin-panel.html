@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de administración</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <div>
+            <h1>Panel de administración</h1>
+            <p>Gestión de propiedades</p>
+        </div>
+        <button id="logout-button">Cerrar sesión</button>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <div class="section-header">
+                <div>
+                    <h2>Propiedades</h2>
+                    <p>Administra las casas que aparecen en la página.</p>
+                </div>
+                <button id="add-property-button">+ Agregar propiedad</button>
+            </div>
+
+            <div id="property-form-container" class="property-form-container">
+                <h2 id="property-form-title">Agregar propiedad</h2>
+                <form id="property-form">
+                    <!-- Campos de propiedad -->
+                    <label>Título <input type="text" id="title" required></label>
+                    <label>Precio <input type="text" id="price" required></label>
+                    <label>Ubicación <input type="text" id="location" required></label>
+                    <label>Habitaciones <input type="number" id="bedrooms" min="0" value="0" required></label>
+                    <label>Baños <input type="number" id="bathrooms" min="0" value="0" required></label>
+
+                    <h3>Información de la propiedad</h3>
+                    <label><input type="checkbox" id="water"> Agua</label>
+                    <label><input type="checkbox" id="electricity"> Electricidad</label>
+                    <label><input type="checkbox" id="deeds"> Escrituras</label>
+                    <label><input type="checkbox" id="debt"> Adeudo</label>
+
+                    <label>Descripción <textarea id="description" rows="5"></textarea></label>
+
+                    <div id="image-upload-section">
+                        <h3>Fotografías de la propiedad</h3>
+                        <input type="file" id="property-images" accept="image/*" multiple>
+                        <button type="button" id="upload-images-button">Subir fotografías</button>
+                        <p id="image-upload-message"></p>
+                        <div id="property-images-preview"></div>
+                    </div>
+
+                    <button type="submit" id="save-property-button">Guardar propiedad</button>
+                    <button type="button" id="cancel-property-button">Cancelar</button>
+                </form>
+                <p id="form-message"></p>
+            </div>
+
+            <div id="property-list">
+                <p>Cargando propiedades...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="admin-panel.js"></script>
+</body>
+</html>
