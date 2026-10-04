@@ -1,5 +1,4 @@
-```javascript
-async function createSessionToken(password) {
+﻿async function createSessionToken(password) {
     const timestamp = Date.now().toString();
 
     const encoder = new TextEncoder();
@@ -112,12 +111,12 @@ export default {
 
         /*
         ============================================================
-        CONFIGURACIÓN
+        CONFIGURACIÃ“N
         ============================================================
         env.DB     -> D1
         env.IMAGES -> R2
-        env.ASSETS -> archivos estáticos
-        env.ADMIN_PASSWORD -> contraseña del administrador
+        env.ASSETS -> archivos estÃ¡ticos
+        env.ADMIN_PASSWORD -> contraseÃ±a del administrador
         ============================================================
         */
 
@@ -128,7 +127,7 @@ export default {
             env.ADMIN_PASSWORD
         );
 
-        console.log("JI Bienes Raíces:", {
+        console.log("JI Bienes RaÃ­ces:", {
             method: request.method,
             path: url.pathname,
             authenticated: isAuthenticated
@@ -174,7 +173,7 @@ export default {
                     return jsonResponse(
                         {
                             success: false,
-                            message: "Contraseña requerida"
+                            message: "ContraseÃ±a requerida"
                         },
                         400
                     );
@@ -204,7 +203,7 @@ export default {
                 return jsonResponse(
                     {
                         success: false,
-                        message: "Contraseña incorrecta"
+                        message: "ContraseÃ±a incorrecta"
                     },
                     401
                 );
@@ -219,7 +218,7 @@ export default {
                 return jsonResponse(
                     {
                         success: false,
-                        message: "Solicitud inválida"
+                        message: "Solicitud invÃ¡lida"
                     },
                     400
                 );
@@ -931,7 +930,7 @@ export default {
 
         /*
         ============================================================
-        API PÚBLICA - OBTENER IMAGEN DESDE R2
+        API PÃšBLICA - OBTENER IMAGEN DESDE R2
         ============================================================
         */
 
@@ -1004,7 +1003,7 @@ export default {
 
         /*
         ============================================================
-        API PÚBLICA - PROPIEDADES
+        API PÃšBLICA - PROPIEDADES
         ============================================================
         */
 
@@ -1116,4 +1115,3 @@ export default {
         );
     }
 };
-```

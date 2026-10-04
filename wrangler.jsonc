@@ -1,0 +1,23 @@
+﻿{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jibienesraices",
+  "main": "Worker.js",
+  "compatibility_date": "2026-10-03",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "d1",
+      "database_id": "ebf7eac8-a29c-421f-b9ed-51567df47f6c"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "ji-bienes-raices"
+    }
+  ]
+}
