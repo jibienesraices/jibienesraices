@@ -844,23 +844,18 @@ main {
 /* Ocultar input original */
 
 #property-images {
-
-    position:
-        absolute;
-
-    width:
-        1px;
-
-    height:
-        1px;
-
-    opacity:
-        0;
-
-    pointer-events:
-        none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
 }
 
+#selected-images-count {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
 
 .file-select-button {
 

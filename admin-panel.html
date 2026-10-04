@@ -30,7 +30,17 @@
                 <form id="property-form">
                     <!-- Campos de propiedad -->
                     <label>Título <input type="text" id="title" required></label>
-                    <label>Precio <input type="text" id="price" required></label>
+                    <label>
+    Precio
+    <input
+        type="text"
+        id="price"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="$0"
+        required
+    >
+</label>
                     <label>Ubicación <input type="text" id="location" required></label>
                     <label>Habitaciones <input type="number" id="bedrooms" min="0" value="0" required></label>
                     <label>Baños <input type="number" id="bathrooms" min="0" value="0" required></label>
@@ -43,13 +53,33 @@
 
                     <label>Descripción <textarea id="description" rows="5"></textarea></label>
 
-                    <div id="image-upload-section">
-                        <h3>Fotografías de la propiedad</h3>
-                        <input type="file" id="property-images" accept="image/*" multiple>
-                        <button type="button" id="upload-images-button">Subir fotografías</button>
-                        <p id="image-upload-message"></p>
-                        <div id="property-images-preview"></div>
-                    </div>
+                 <div id="image-upload-section">
+    <h3>Fotografías de la propiedad</h3>
+
+    <div class="upload-area">
+        <input
+            type="file"
+            id="property-images"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            multiple
+        >
+
+        <label
+            for="property-images"
+            class="file-select-button"
+        >
+            📷 Seleccionar fotografías
+        </label>
+
+        <span id="selected-images-count">
+            Ninguna fotografía seleccionada
+        </span>
+    </div>
+
+    <p id="image-upload-message"></p>
+
+    <div id="property-images-preview"></div>
+</div>
 
                     <button type="submit" id="save-property-button">Guardar propiedad</button>
                     <button type="button" id="cancel-property-button">Cancelar</button>
