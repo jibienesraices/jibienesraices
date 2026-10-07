@@ -1,187 +1,67 @@
-/* =========================================================
-   JI BIENES RAÍCES
-   INICIO DE SESIÓN DE ADMINISTRACIÓN
-   ========================================================= */
+const loginForm = document.getElementById("login-form");
+const message = document.getElementById("message");
 
-
-/* =========================================================
-   ELEMENTOS
-   ========================================================= */
-
-const loginForm =
-    document.getElementById("login-form");
-
-const message =
-    document.getElementById("message");
-
-const passwordInput =
-    document.getElementById("password");
-
-const loginButton =
-    loginForm.querySelector("button[type='submit']");
-
-
-/* =========================================================
-   INICIO DE SESIÓN
-   ========================================================= */
-
-loginForm.addEventListener(
-    "submit",
-    async event => {
-
+if (loginForm && message) {
+    loginForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
+        const passwordInput = document.getElementById("password");
 
-        const password =
-            passwordInput.value;
-
-
-        /* Evitar contraseña vacía */
-
-        if (!password) {
-
-            message.textContent =
-                "Introduce tu contraseña.";
-
+        if (!passwordInput) {
+            message.textContent = "Error: no se encontró el campo de contraseña.";
             return;
         }
 
+        const password = passwordInput.value;
 
-        /* Estado de carga */
-
-        message.textContent =
-            "Comprobando...";
-
-
-        loginButton.disabled =
-            true;
-
-        loginButton.textContent =
-            "Comprobando...";
-
+        message.textContent = "Comprobando...";
 
         try {
+            const response = await fetch("/api/admin/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    password: password
+                })
+            });
 
-            const response =
-                await fetch(
-                    "/api/admin/login",
-                    {
-                        method: "POST",
+            const contentType = response.headers.get("content-type") || "";
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+            let data = null;
 
-                        body:
-                            JSON.stringify({
-                                password:
-                                    password
-                            })
-                    }
+            if (contentType.includes("application/json")) {
+                data = await response.json();
+            } else {
+                const text = await response.text();
+
+                console.error(
+                    "El servidor no devolvió JSON.",
+                    "Status:",
+                    response.status,
+                    "Respuesta:",
+                    text
                 );
 
-
-            /* =================================================
-               RESPUESTA DEL SERVIDOR
-               ================================================= */
-
-            let data = {};
-
-            try {
-
-                data =
-                    await response.json();
-
-            } catch {
-
-                data = {};
-
-            }
-
-
-            /* =================================================
-               LOGIN CORRECTO
-               ================================================= */
-
-            if (
-                response.ok &&
-                data.success
-            ) {
-
                 message.textContent =
-                    "Acceso correcto.";
-
-
-                loginButton.textContent =
-                    "Acceso concedido";
-
-
-                /*
-                 * Pequeña pausa para que el usuario
-                 * vea el mensaje antes de entrar.
-                 */
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        "/admin-panel.html";
-
-                }, 300);
-
-
+                    `Error del servidor (${response.status}).`;
                 return;
             }
 
-
-            /* =================================================
-               CONTRASEÑA INCORRECTA
-               ================================================= */
-
-            message.textContent =
-                data.message ||
-                "Contraseña incorrecta.";
-
-
-            passwordInput.value = "";
-
-            passwordInput.focus();
-
+            if (response.ok && data.success) {
+                message.textContent = "Acceso correcto";
+                window.location.href = "/admin-panel.html";
+            } else {
+                message.textContent =
+                    data.message || "Contraseña incorrecta.";
+            }
 
         } catch (error) {
-
-            console.error(
-                "Error de inicio de sesión:",
-                error
-            );
-
+            console.error("Error al iniciar sesión:", error);
 
             message.textContent =
                 "Error de conexión con el servidor.";
-
-        } finally {
-
-            /*
-             * Si el login fue correcto,
-             * dejamos el botón bloqueado mientras
-             * se realiza la redirección.
-             */
-
-            if (
-                !message.textContent.includes(
-                    "Acceso correcto"
-                )
-            ) {
-
-                loginButton.disabled =
-                    false;
-
-                loginButton.textContent =
-                    "Entrar";
-
-            }
-
         }
-
-    }
-);
+    });
+}
