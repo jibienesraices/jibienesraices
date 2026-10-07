@@ -1477,8 +1477,18 @@ main {
 /* =========================================================
    GALERÍA
    ========================================================= */
+.property-image-gallery {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 0 23px 20px;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
 
 .property-image-item {
+    flex: 0 0 90px;
     width: 90px;
     min-width: 90px;
     overflow: hidden;
@@ -1493,6 +1503,7 @@ main {
     height: 60px;
     object-fit: cover;
 }
+
 /* =========================================================
    ACCIONES DE IMAGEN
    ========================================================= */
