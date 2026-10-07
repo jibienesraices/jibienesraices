@@ -68,14 +68,6 @@ body {
    MARCA DE AGUA DEL LOGO
    ========================================================= */
 
-/*
-   El logo también aparece de forma muy sutil
-   detrás del contenido.
-
-   La imagen 1.jpeg debe estar en:
-   /images/1.jpeg
-*/
-
 body::before {
     content: "";
 
@@ -144,10 +136,13 @@ body::before {
 }
 
 
-/* Marca */
+/* =========================================================
+   MARCA
+   ========================================================= */
 
 .brand {
     position: relative;
+
     z-index: 1;
 
     max-width: 900px;
@@ -195,6 +190,7 @@ body::before {
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     gap: 18px;
@@ -368,6 +364,8 @@ main {
     overflow: hidden;
 
     background: var(--navy);
+
+    min-height: 235px;
 }
 
 
@@ -386,6 +384,29 @@ main {
 
 #property-list article:hover img {
     transform: scale(1.04);
+}
+
+
+/* Imagen no disponible */
+
+.no-property-image {
+    width: 100%;
+
+    height: 235px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    color: rgba(255, 255, 255, 0.8);
+
+    text-align: center;
+
+    font-size: 0.95rem;
 }
 
 
@@ -531,6 +552,41 @@ main {
 
 
 /* =========================================================
+   MENSAJES SIN PROPIEDADES
+   ========================================================= */
+
+.no-properties {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    padding: 50px 25px;
+
+    background: rgba(255, 255, 255, 0.9);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+}
+
+
+.no-properties h3 {
+    color: var(--navy);
+
+    margin-bottom: 10px;
+}
+
+
+.no-properties p {
+    color: var(--text-light);
+
+    margin: 0;
+}
+
+
+/* =========================================================
    VENTANA MODAL
    ========================================================= */
 
@@ -546,6 +602,7 @@ main {
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     padding: 20px;
@@ -597,6 +654,7 @@ main {
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     overflow: hidden;
@@ -605,9 +663,19 @@ main {
 
 .modal-image {
     width: 100%;
+
     height: 100%;
 
     object-fit: cover;
+}
+
+
+.no-modal-image {
+    color: rgba(255, 255, 255, 0.8);
+
+    text-align: center;
+
+    padding: 20px;
 }
 
 
@@ -623,6 +691,7 @@ main {
     transform: translateY(-50%);
 
     width: 48px;
+
     height: 48px;
 
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -661,6 +730,31 @@ main {
 
 
 /* =========================================================
+   CONTADOR DE GALERÍA
+   ========================================================= */
+
+.gallery-counter {
+    position: absolute;
+
+    right: 25px;
+
+    top: 25px;
+
+    z-index: 4;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: rgba(16, 35, 68, 0.78);
+
+    color: white;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
    BOTÓN CERRAR MODAL
    ========================================================= */
 
@@ -668,9 +762,11 @@ main {
     position: absolute;
 
     top: 12px;
+
     right: 12px;
 
     width: 42px;
+
     height: 42px;
 
     border: none;
@@ -685,7 +781,7 @@ main {
 
     cursor: pointer;
 
-    z-index: 3;
+    z-index: 5;
 
     transition:
         background 0.2s ease,
@@ -729,6 +825,13 @@ main {
 }
 
 
+.modal-info > p {
+    color: var(--text-light);
+
+    margin: 9px 0;
+}
+
+
 .modal-services {
     margin-top: 22px;
 
@@ -742,6 +845,17 @@ main {
     margin: 9px 0;
 
     color: var(--text-light);
+}
+
+
+.modal-description {
+    margin-top: 22px !important;
+
+    padding-top: 18px;
+
+    border-top: 1px solid var(--border);
+
+    line-height: 1.7;
 }
 
 
@@ -791,6 +905,7 @@ main {
     position: fixed;
 
     right: 20px;
+
     bottom: 20px;
 
     z-index: 1000;
@@ -972,7 +1087,6 @@ main {
     #property-list {
         gap: 22px;
     }
-
 }
 
 
@@ -1055,6 +1169,16 @@ main {
     }
 
 
+    .property-image-container {
+        min-height: 220px;
+    }
+
+
+    .no-property-image {
+        height: 220px;
+    }
+
+
     /* Modal */
 
     .property-modal {
@@ -1084,6 +1208,22 @@ main {
     }
 
 
+    .gallery-button {
+        width: 42px;
+
+        height: 42px;
+
+        font-size: 1.5rem;
+    }
+
+
+    .gallery-counter {
+        right: 15px;
+
+        top: 15px;
+    }
+
+
     /* Contacto */
 
     .owner-contact {
@@ -1106,7 +1246,6 @@ main {
             calc(100vw - 24px)
         );
     }
-
 }
 
 
@@ -1138,5 +1277,4 @@ main {
 
         font-size: 13px;
     }
-
 }
