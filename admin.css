@@ -1489,7 +1489,7 @@ main {
     grid-template-columns:
         repeat(
             auto-fill,
-            minmax(135px, 1fr)
+            minmax(110px, 130px)
         );
 
     gap:
@@ -1526,7 +1526,7 @@ main {
         100%;
 
     height:
-        105px;
+        80px;
 
     object-fit:
         cover;
