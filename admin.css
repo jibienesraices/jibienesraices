@@ -1475,26 +1475,13 @@ main {
    GALERÍA
    ========================================================= */
 
-.property-image-gallery {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(110px, 130px)
-        );
-
-    gap:
-        10px;
-
-    padding:
-        0 23px 20px;
-}
-
-
 .property-image-item {
+
+    width:
+        120px;
+
+    min-width:
+        120px;
 
     overflow:
         hidden;
@@ -1508,6 +1495,10 @@ main {
 
     background:
         var(--surface-soft);
+
+    box-shadow:
+        0 3px 10px
+        rgba(16, 35, 68, 0.08);
 }
 
 
@@ -1517,10 +1508,10 @@ main {
         block;
 
     width:
-        100%;
+        120px;
 
     height:
-        80px;
+        75px;
 
     object-fit:
         cover;
