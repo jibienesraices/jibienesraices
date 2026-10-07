@@ -63,12 +63,16 @@ function updateSelectedImagesCount() {
     }
 
     if (selectedFiles.length === 0) {
-        selectedImagesCount.textContent = "Ninguna fotografía seleccionada";
+        selectedImagesCount.textContent =
+            "Ninguna fotografía seleccionada";
+
         return;
     }
 
     if (selectedFiles.length === 1) {
-        selectedImagesCount.textContent = "1 fotografía seleccionada";
+        selectedImagesCount.textContent =
+            "1 fotografía seleccionada";
+
         return;
     }
 
@@ -81,14 +85,23 @@ function renderSelectedImagesPreview() {
     propertyImagesPreview.innerHTML = "";
 
     selectedFiles.forEach((file, index) => {
+
         const reader = new FileReader();
 
         reader.onload = (event) => {
-            const previewItem = document.createElement("div");
-            previewItem.className = "image-preview-item";
+
+            const previewItem =
+                document.createElement("div");
+
+            previewItem.className =
+                "image-preview-item";
 
             previewItem.innerHTML = `
-                <img src="${event.target.result}" alt="Vista previa">
+                <img
+                    src="${event.target.result}"
+                    alt="Vista previa"
+                >
+
                 <button
                     type="button"
                     class="delete-image-button"
@@ -98,7 +111,9 @@ function renderSelectedImagesPreview() {
                 </button>
             `;
 
-            propertyImagesPreview.appendChild(previewItem);
+            propertyImagesPreview.appendChild(
+                previewItem
+            );
         };
 
         reader.readAsDataURL(file);
@@ -107,85 +122,123 @@ function renderSelectedImagesPreview() {
 
 
 propertyImagesInput.addEventListener("change", () => {
-    selectedFiles = Array.from(propertyImagesInput.files);
+
+    selectedFiles =
+        Array.from(propertyImagesInput.files);
 
     updateSelectedImagesCount();
     renderSelectedImagesPreview();
 
     if (selectedFiles.length > 0) {
+
         imageUploadMessage.textContent =
             "Las fotografías se subirán al guardar la propiedad.";
+
     } else {
+
         imageUploadMessage.textContent = "";
     }
 });
 
 
-propertyImagesPreview.addEventListener("click", (event) => {
-    const button = event.target.closest(".delete-image-button");
+propertyImagesPreview.addEventListener(
+    "click",
+    (event) => {
 
-    if (!button) {
-        return;
+        const button =
+            event.target.closest(
+                ".delete-image-button"
+            );
+
+        if (!button) {
+            return;
+        }
+
+        const index =
+            Number(button.dataset.selectedIndex);
+
+        if (Number.isNaN(index)) {
+            return;
+        }
+
+        selectedFiles.splice(index, 1);
+
+        updateSelectedImagesCount();
+        renderSelectedImagesPreview();
+
+        if (selectedFiles.length === 0) {
+            imageUploadMessage.textContent = "";
+        }
     }
-
-    const index = Number(button.dataset.selectedIndex);
-
-    if (Number.isNaN(index)) {
-        return;
-    }
-
-    selectedFiles.splice(index, 1);
-
-    updateSelectedImagesCount();
-    renderSelectedImagesPreview();
-
-    if (selectedFiles.length === 0) {
-        imageUploadMessage.textContent = "";
-    }
-});
+);
 
 
 /* =========================================================
    MOSTRAR / OCULTAR FORMULARIO
    ========================================================= */
 
-addPropertyButton.addEventListener("click", () => {
-    editingPropertyId = null;
+addPropertyButton.addEventListener(
+    "click",
+    () => {
 
-    propertyForm.reset();
+        editingPropertyId = null;
 
-    selectedFiles = [];
-    propertyImagesInput.value = "";
+        propertyForm.reset();
 
-    propertyImagesPreview.innerHTML = "";
-    imageUploadMessage.textContent = "";
+        /*
+         * B es la prioridad predeterminada.
+         */
+        priorityInput.value = "B";
 
-    updateSelectedImagesCount();
+        selectedFiles = [];
 
-    propertyFormTitle.textContent = "Agregar propiedad";
-    formMessage.textContent = "";
+        propertyImagesInput.value = "";
 
-    propertyFormContainer.classList.add("active");
-});
+        propertyImagesPreview.innerHTML = "";
+
+        imageUploadMessage.textContent = "";
+
+        updateSelectedImagesCount();
+
+        propertyFormTitle.textContent =
+            "Agregar propiedad";
+
+        formMessage.textContent = "";
+
+        propertyFormContainer.classList.add(
+            "active"
+        );
+    }
+);
 
 
-cancelPropertyButton.addEventListener("click", () => {
-    editingPropertyId = null;
+cancelPropertyButton.addEventListener(
+    "click",
+    () => {
 
-    propertyForm.reset();
+        editingPropertyId = null;
 
-    selectedFiles = [];
-    propertyImagesInput.value = "";
+        propertyForm.reset();
 
-    propertyImagesPreview.innerHTML = "";
-    imageUploadMessage.textContent = "";
+        priorityInput.value = "B";
 
-    updateSelectedImagesCount();
+        selectedFiles = [];
 
-    formMessage.textContent = "";
+        propertyImagesInput.value = "";
 
-    propertyFormContainer.classList.remove("active");
-});
+        propertyImagesPreview.innerHTML = "";
+
+        imageUploadMessage.textContent = "";
+
+        updateSelectedImagesCount();
+
+        formMessage.textContent = "";
+
+        propertyFormContainer.classList.remove(
+            "active"
+        );
+    }
+);
 
 
 /* =========================================================
@@ -193,23 +246,36 @@ cancelPropertyButton.addEventListener("click", () => {
    ========================================================= */
 
 async function loadProperties() {
+
     try {
-        const response = await fetch("/api/admin/properties");
+
+        const response =
+            await fetch(
+                "/api/admin/properties"
+            );
 
         if (response.status === 401) {
-            window.location.href = "/admin.html";
+
+            window.location.href =
+                "/admin.html";
+
             return;
         }
 
         if (!response.ok) {
-            throw new Error("No se pudieron cargar las propiedades.");
+
+            throw new Error(
+                "No se pudieron cargar las propiedades."
+            );
         }
 
-        const properties = await response.json();
+        const properties =
+            await response.json();
 
         renderProperties(properties);
 
     } catch (error) {
+
         console.error(error);
 
         propertyList.innerHTML = `
@@ -226,7 +292,12 @@ async function loadProperties() {
    ========================================================= */
 
 function renderProperties(properties) {
-    if (!properties || properties.length === 0) {
+
+    if (
+        !properties ||
+        properties.length === 0
+    ) {
+
         propertyList.innerHTML = `
             <p>
                 No hay propiedades registradas todavía.
@@ -236,137 +307,177 @@ function renderProperties(properties) {
         return;
     }
 
-    propertyList.innerHTML = properties.map(property => {
 
-        const images = property.images || [];
+    propertyList.innerHTML =
+        properties.map(property => {
 
-        const imagesHTML = images.length
-            ? `
-                <div class="property-image-gallery">
-                    ${images.map(image => `
-                        <div class="image-gallery-item">
+            const images =
+                property.images || [];
 
-                            <img
-                                src="${image}"
-                                alt="Fotografía de propiedad"
-                            >
 
-                            <div class="image-actions">
+            const imagesHTML =
+                images.length
+                    ? `
+                        <div class="property-image-gallery">
 
-                                <button
-                                    type="button"
-                                    class="primary-image-button"
-                                    data-property-id="${property.id}"
-                                    data-image-url="${image}"
-                                >
-                                    ⭐ Marcar como principal
-                                </button>
+                            ${images.map(image => `
+                                <div class="image-gallery-item">
 
-                                <button
-                                    type="button"
-                                    class="delete-image-button"
-                                    data-property-id="${property.id}"
-                                    data-image-url="${image}"
-                                >
-                                    Eliminar foto
-                                </button>
+                                    <img
+                                        src="${image}"
+                                        alt="Fotografía de propiedad"
+                                    >
 
-                            </div>
+                                    <div class="image-actions">
+
+                                        <button
+                                            type="button"
+                                            class="primary-image-button"
+                                            data-property-id="${property.id}"
+                                            data-image-url="${image}"
+                                        >
+                                            ⭐ Marcar como principal
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="delete-image-button"
+                                            data-property-id="${property.id}"
+                                            data-image-url="${image}"
+                                        >
+                                            Eliminar foto
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            `).join("")}
 
                         </div>
-                    `).join("")}
-                </div>
-            `
-            : `
-                <p class="no-images">
-                    Esta propiedad todavía no tiene fotografías.
-                </p>
+                    `
+                    : `
+                        <p class="no-images">
+                            Esta propiedad todavía no tiene fotografías.
+                        </p>
+                    `;
+
+
+            return `
+                <article class="property-card">
+
+                    <div class="property-card-header">
+
+                        <div>
+
+                            <h3>
+                                ${property.title}
+                            </h3>
+
+                            <p class="property-price">
+                                ${formatPrice(property.price)}
+                            </p>
+
+                            <p>
+                                📍 ${property.location}
+                            </p>
+
+                            <p>
+                                Prioridad:
+                                <strong>
+                                    ${property.priority || "B"}
+                                </strong>
+                            </p>
+
+                        </div>
+
+
+                        <div class="property-actions">
+
+                            <button
+                                type="button"
+                                class="edit-property-button"
+                                data-id="${property.id}"
+                            >
+                                Editar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="delete-property-button"
+                                data-id="${property.id}"
+                            >
+                                Eliminar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="property-details">
+
+                        <span>
+                            🛏️ ${property.bedrooms}
+                            habitaciones
+                        </span>
+
+                        <span>
+                            🚿 ${property.bathrooms}
+                            baños
+                        </span>
+
+                        <span>
+                            💧 ${
+                                property.water
+                                    ? "Agua"
+                                    : "Sin agua"
+                            }
+                        </span>
+
+                        <span>
+                            ⚡ ${
+                                property.electricity
+                                    ? "Electricidad"
+                                    : "Sin electricidad"
+                            }
+                        </span>
+
+                        <span>
+                            📜 ${
+                                property.deeds
+                                    ? "Escrituras"
+                                    : "Sin escrituras"
+                            }
+                        </span>
+
+                        <span>
+                            💰 ${
+                                property.debt
+                                    ? "Con adeudo"
+                                    : "Sin adeudo"
+                            }
+                        </span>
+
+                    </div>
+
+
+                    ${
+                        property.description
+                            ? `
+                                <p class="property-description">
+                                    ${property.description}
+                                </p>
+                            `
+                            : ""
+                    }
+
+
+                    ${imagesHTML}
+
+                </article>
             `;
 
-        return `
-            <article class="property-card">
-
-                <div class="property-card-header">
-
-                    <div>
-                        <h3>${property.title}</h3>
-
-                        <p class="property-price">
-                            ${formatPrice(property.price)}
-                        </p>
-
-                        <p>
-                            📍 ${property.location}
-                        </p>
-                    </div>
-
-                    <div class="property-actions">
-
-                        <button
-                            type="button"
-                            class="edit-property-button"
-                            data-id="${property.id}"
-                        >
-                            Editar
-                        </button>
-
-                        <button
-                            type="button"
-                            class="delete-property-button"
-                            data-id="${property.id}"
-                        >
-                            Eliminar
-                        </button>
-
-                    </div>
-
-                </div>
-
-                <div class="property-details">
-
-                    <span>🛏️ ${property.bedrooms} habitaciones</span>
-
-                    <span>🚿 ${property.bathrooms} baños</span>
-
-                    <span>
-                        💧 ${property.water ? "Agua" : "Sin agua"}
-                    </span>
-
-                    <span>
-                        ⚡ ${property.electricity
-                            ? "Electricidad"
-                            : "Sin electricidad"}
-                    </span>
-
-                    <span>
-                        📜 ${property.deeds
-                            ? "Escrituras"
-                            : "Sin escrituras"}
-                    </span>
-
-                    <span>
-                        💰 ${property.debt
-                            ? "Con adeudo"
-                            : "Sin adeudo"}
-                    </span>
-
-                </div>
-
-                ${
-                    property.description
-                        ? `
-                            <p class="property-description">
-                                ${property.description}
-                            </p>
-                        `
-                        : ""
-                }
-
-                ${imagesHTML}
-
-            </article>
-        `;
-    }).join("");
+        }).join("");
 }
 
 
@@ -374,427 +485,659 @@ function renderProperties(properties) {
    EDITAR PROPIEDAD
    ========================================================= */
 
-propertyList.addEventListener("click", async (event) => {
+propertyList.addEventListener(
+    "click",
+    async (event) => {
 
-    const editButton =
-        event.target.closest(".edit-property-button");
+        const editButton =
+            event.target.closest(
+                ".edit-property-button"
+            );
 
-    if (!editButton) {
-        return;
-    }
-
-    const propertyId = editButton.dataset.id;
-
-    try {
-        const response = await fetch("/api/admin/properties");
-
-        if (!response.ok) {
-            throw new Error("No se pudieron obtener las propiedades.");
-        }
-
-        const properties = await response.json();
-
-        const property = properties.find(
-            item => String(item.id) === String(propertyId)
-        );
-
-        if (!property) {
-            alert("No se encontró la propiedad.");
+        if (!editButton) {
             return;
         }
 
-        editingPropertyId = property.id;
+        const propertyId =
+            editButton.dataset.id;
 
-        titleInput.value = property.title || "";
-        priceInput.value = formatPrice(property.price);
-        locationInput.value = property.location || "";
 
-bedroomsInput.value = property.bedrooms || 0;
-bathroomsInput.value = property.bathrooms || 0;
+        try {
 
-priorityInput.value = property.priority || "B";
+            const response =
+                await fetch(
+                    "/api/admin/properties"
+                );
 
-waterInput.checked = Boolean(property.water);
-        electricityInput.checked = Boolean(property.electricity);
-        deedsInput.checked = Boolean(property.deeds);
-        debtInput.checked = Boolean(property.debt);
 
-        descriptionInput.value = property.description || "";
+            if (!response.ok) {
 
-        selectedFiles = [];
-        propertyImagesInput.value = "";
+                throw new Error(
+                    "No se pudieron obtener las propiedades."
+                );
+            }
 
-        propertyImagesPreview.innerHTML = "";
-        imageUploadMessage.textContent = "";
 
-        updateSelectedImagesCount();
+            const properties =
+                await response.json();
 
-        propertyFormTitle.textContent = "Editar propiedad";
-        formMessage.textContent = "";
 
-        propertyFormContainer.classList.add("active");
+            const property =
+                properties.find(
+                    item =>
+                        String(item.id) ===
+                        String(propertyId)
+                );
 
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
 
-    } catch (error) {
-        console.error(error);
+            if (!property) {
 
-        alert("Ocurrió un error al cargar la propiedad.");
+                alert(
+                    "No se encontró la propiedad."
+                );
+
+                return;
+            }
+
+
+            editingPropertyId =
+                property.id;
+
+
+            titleInput.value =
+                property.title || "";
+
+
+            priceInput.value =
+                formatPrice(property.price);
+
+
+            locationInput.value =
+                property.location || "";
+
+
+            bedroomsInput.value =
+                property.bedrooms || 0;
+
+
+            bathroomsInput.value =
+                property.bathrooms || 0;
+
+
+            priorityInput.value =
+                property.priority || "B";
+
+
+            waterInput.checked =
+                Boolean(property.water);
+
+
+            electricityInput.checked =
+                Boolean(
+                    property.electricity
+                );
+
+
+            deedsInput.checked =
+                Boolean(property.deeds);
+
+
+            debtInput.checked =
+                Boolean(property.debt);
+
+
+            descriptionInput.value =
+                property.description || "";
+
+
+            selectedFiles = [];
+
+            propertyImagesInput.value = "";
+
+            propertyImagesPreview.innerHTML = "";
+
+            imageUploadMessage.textContent = "";
+
+            updateSelectedImagesCount();
+
+
+            propertyFormTitle.textContent =
+                "Editar propiedad";
+
+
+            formMessage.textContent = "";
+
+
+            propertyFormContainer.classList.add(
+                "active"
+            );
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Ocurrió un error al cargar la propiedad."
+            );
+        }
     }
-});
+);
 
 
 /* =========================================================
    ELIMINAR PROPIEDAD
    ========================================================= */
 
-propertyList.addEventListener("click", async (event) => {
+propertyList.addEventListener(
+    "click",
+    async (event) => {
 
-    const deleteButton =
-        event.target.closest(".delete-property-button");
+        const deleteButton =
+            event.target.closest(
+                ".delete-property-button"
+            );
 
-    if (!deleteButton) {
-        return;
-    }
 
-    const propertyId = deleteButton.dataset.id;
-
-    const confirmed = confirm(
-        "¿Seguro que quieres eliminar esta propiedad?"
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
-    try {
-        const response = await fetch(
-            `/api/admin/properties/${propertyId}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error("No se pudo eliminar la propiedad.");
+        if (!deleteButton) {
+            return;
         }
 
-        await loadProperties();
 
-    } catch (error) {
-        console.error(error);
+        const propertyId =
+            deleteButton.dataset.id;
 
-        alert("No se pudo eliminar la propiedad.");
+
+        const confirmed =
+            confirm(
+                "¿Seguro que quieres eliminar esta propiedad?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/admin/properties/${propertyId}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "No se pudo eliminar la propiedad."
+                );
+            }
+
+
+            await loadProperties();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo eliminar la propiedad."
+            );
+        }
     }
-});
+);
 
 
 /* =========================================================
    MARCAR IMAGEN COMO PRINCIPAL
    ========================================================= */
 
-propertyList.addEventListener("click", async (event) => {
+propertyList.addEventListener(
+    "click",
+    async (event) => {
 
-    const primaryButton =
-        event.target.closest(".primary-image-button");
+        const primaryButton =
+            event.target.closest(
+                ".primary-image-button"
+            );
 
-    if (!primaryButton) {
-        return;
-    }
 
-    const propertyId = primaryButton.dataset.propertyId;
-    const imageUrl = primaryButton.dataset.imageUrl;
+        if (!primaryButton) {
+            return;
+        }
 
-    try {
-        const response = await fetch(
-            `/api/admin/properties/${propertyId}/images/primary`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    image_url: imageUrl
-                })
+
+        const propertyId =
+            primaryButton.dataset.propertyId;
+
+
+        const imageUrl =
+            primaryButton.dataset.imageUrl;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/admin/properties/${propertyId}/images/primary`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify({
+                            image_url:
+                                imageUrl
+                        })
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "No se pudo marcar la imagen como principal."
+                );
             }
-        );
 
-        if (!response.ok) {
-            throw new Error(
+
+            await loadProperties();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
                 "No se pudo marcar la imagen como principal."
             );
         }
-
-        await loadProperties();
-
-    } catch (error) {
-        console.error(error);
-
-        alert(
-            "No se pudo marcar la imagen como principal."
-        );
     }
-});
+);
 
 
 /* =========================================================
    ELIMINAR IMAGEN
    ========================================================= */
 
-propertyList.addEventListener("click", async (event) => {
+propertyList.addEventListener(
+    "click",
+    async (event) => {
 
-    const deleteImageButton =
-        event.target.closest(".delete-image-button");
+        const deleteImageButton =
+            event.target.closest(
+                ".delete-image-button"
+            );
 
-    if (!deleteImageButton) {
-        return;
-    }
 
-    /*
-     * Si tiene data-selected-index significa que es
-     * una imagen que todavía no se ha subido.
-     */
-    if (deleteImageButton.dataset.selectedIndex !== undefined) {
-        return;
-    }
+        if (!deleteImageButton) {
+            return;
+        }
 
-    const propertyId =
-        deleteImageButton.dataset.propertyId;
 
-    const imageUrl =
-        deleteImageButton.dataset.imageUrl;
+        /*
+         * Si tiene data-selected-index significa
+         * que todavía no se ha subido.
+         */
 
-    const confirmed = confirm(
-        "¿Seguro que quieres eliminar esta fotografía?"
-    );
+        if (
+            deleteImageButton.dataset.selectedIndex !==
+            undefined
+        ) {
+            return;
+        }
 
-    if (!confirmed) {
-        return;
-    }
 
-    try {
-        const response = await fetch(
-            `/api/admin/properties/${propertyId}/images`,
-            {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    image_url: imageUrl
-                })
+        const propertyId =
+            deleteImageButton.dataset.propertyId;
+
+
+        const imageUrl =
+            deleteImageButton.dataset.imageUrl;
+
+
+        const confirmed =
+            confirm(
+                "¿Seguro que quieres eliminar esta fotografía?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/admin/properties/${propertyId}/images`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify({
+                            image_url:
+                                imageUrl
+                        })
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "No se pudo eliminar la fotografía."
+                );
             }
-        );
 
-        if (!response.ok) {
-            throw new Error(
+
+            await loadProperties();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
                 "No se pudo eliminar la fotografía."
             );
         }
-
-        await loadProperties();
-
-    } catch (error) {
-        console.error(error);
-
-        alert("No se pudo eliminar la fotografía.");
     }
-});
+);
 
 
 /* =========================================================
    GUARDAR PROPIEDAD
    ========================================================= */
 
-propertyForm.addEventListener("submit", async (event) => {
+propertyForm.addEventListener(
+    "submit",
+    async (event) => {
 
-    event.preventDefault();
+        event.preventDefault();
 
-    formMessage.textContent = "Guardando propiedad...";
-    formMessage.className = "";
 
-    const price = getPriceNumber(priceInput.value);
-
-    if (!price) {
         formMessage.textContent =
-            "Introduce un precio válido.";
+            "Guardando propiedad.";
 
-        return;
-    }
-
-const propertyData = {
-    title: titleInput.value.trim(),
-    price: price,
-    location: locationInput.value.trim(),
-
-    bedrooms: Number(bedroomsInput.value) || 0,
-    bathrooms: Number(bathroomsInput.value) || 0,
-
-    priority: priorityInput.value,
-
-    water: waterInput.checked ? 1 : 0,
-        electricity: electricityInput.checked ? 1 : 0,
-        deeds: deedsInput.checked ? 1 : 0,
-        debt: debtInput.checked ? 1 : 0,
-
-        description: descriptionInput.value.trim()
-    };
+        formMessage.className = "";
 
 
-    try {
-
-        let response;
-        let propertyId;
-
-        /* =====================================================
-           CREAR
-           ===================================================== */
-
-        if (!editingPropertyId) {
-
-            response = await fetch(
-                "/api/admin/properties",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(propertyData)
-                }
+        const price =
+            getPriceNumber(
+                priceInput.value
             );
 
-        }
 
-        /* =====================================================
-           EDITAR
-           ===================================================== */
+        if (!price) {
 
-        else {
+            formMessage.textContent =
+                "Introduce un precio válido.";
 
-            response = await fetch(
-                `/api/admin/properties/${editingPropertyId}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(propertyData)
-                }
-            );
-
+            return;
         }
 
 
-        if (!response.ok) {
+        const propertyData = {
 
-            const errorText = await response.text();
+            title:
+                titleInput.value.trim(),
 
-            throw new Error(
-                errorText || "No se pudo guardar la propiedad."
-            );
-        }
+            price:
+                price,
+
+            location:
+                locationInput.value.trim(),
+
+            bedrooms:
+                Number(
+                    bedroomsInput.value
+                ) || 0,
+
+            bathrooms:
+                Number(
+                    bathroomsInput.value
+                ) || 0,
+
+            priority:
+                priorityInput.value,
+
+            water:
+                waterInput.checked
+                    ? 1
+                    : 0,
+
+            electricity:
+                electricityInput.checked
+                    ? 1
+                    : 0,
+
+            deeds:
+                deedsInput.checked
+                    ? 1
+                    : 0,
+
+            debt:
+                debtInput.checked
+                    ? 1
+                    : 0,
+
+            description:
+                descriptionInput.value.trim()
+        };
 
 
-        const result = await response.json();
+        try {
+
+            let response;
+            let propertyId;
 
 
-        propertyId =
-            editingPropertyId || result.id;
+            /* =================================================
+               CREAR
+               ================================================= */
 
+            if (!editingPropertyId) {
 
-        /* =====================================================
-           SUBIR FOTOGRAFÍAS A R2
-           ===================================================== */
-
-        if (selectedFiles.length > 0) {
-
-            imageUploadMessage.textContent =
-                "Subiendo fotografías...";
-
-            for (const file of selectedFiles) {
-
-                const formData = new FormData();
-
-                formData.append("image", file);
-
-
-                const imageResponse = await fetch(
-                    `/api/admin/properties/${propertyId}/images`,
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
-
-
-                if (!imageResponse.ok) {
-
-                    const imageError =
-                        await imageResponse.text();
-
-                    throw new Error(
-                        imageError ||
-                        "No se pudo subir una fotografía."
+                response =
+                    await fetch(
+                        "/api/admin/properties",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+                            body:
+                                JSON.stringify(
+                                    propertyData
+                                )
+                        }
                     );
-                }
+
             }
 
-            imageUploadMessage.textContent =
-                "Fotografías subidas correctamente.";
+
+            /* =================================================
+               EDITAR
+               ================================================= */
+
+            else {
+
+                response =
+                    await fetch(
+                        `/api/admin/properties/${editingPropertyId}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+                            body:
+                                JSON.stringify(
+                                    propertyData
+                                )
+                        }
+                    );
+            }
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+
+                throw new Error(
+                    errorText ||
+                    "No se pudo guardar la propiedad."
+                );
+            }
+
+
+            const result =
+                await response.json();
+
+
+            propertyId =
+                editingPropertyId ||
+                result.id;
+
+
+            /* =================================================
+               SUBIR FOTOGRAFÍAS A R2
+               ================================================= */
+
+            if (
+                selectedFiles.length > 0
+            ) {
+
+                imageUploadMessage.textContent =
+                    "Subiendo fotografías...";
+
+
+                for (
+                    const file
+                    of selectedFiles
+                ) {
+
+                    const formData =
+                        new FormData();
+
+
+                    formData.append(
+                        "image",
+                        file
+                    );
+
+
+                    const imageResponse =
+                        await fetch(
+                            `/api/admin/properties/${propertyId}/images`,
+                            {
+                                method: "POST",
+                                body:
+                                    formData
+                            }
+                        );
+
+
+                    if (
+                        !imageResponse.ok
+                    ) {
+
+                        const imageError =
+                            await imageResponse.text();
+
+
+                        throw new Error(
+                            imageError ||
+                            "No se pudo subir una fotografía."
+                        );
+                    }
+                }
+
+
+                imageUploadMessage.textContent =
+                    "Fotografías subidas correctamente.";
+            }
+
+
+            formMessage.textContent =
+                "Propiedad guardada correctamente.";
+
+
+            formMessage.className =
+                "success-message";
+
+
+            /* =================================================
+               LIMPIAR FORMULARIO
+               ================================================= */
+
+            propertyForm.reset();
+
+            priorityInput.value = "B";
+
+            editingPropertyId = null;
+
+            selectedFiles = [];
+
+            propertyImagesInput.value = "";
+
+            propertyImagesPreview.innerHTML = "";
+
+            updateSelectedImagesCount();
+
+            propertyFormTitle.textContent =
+                "Agregar propiedad";
+
+
+            await loadProperties();
+
+
+            setTimeout(() => {
+
+                propertyFormContainer.classList.remove(
+                    "active"
+                );
+
+                formMessage.textContent = "";
+
+                imageUploadMessage.textContent = "";
+
+            }, 1000);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            formMessage.textContent =
+                error.message ||
+                "Ocurrió un error al guardar la propiedad.";
+
+            formMessage.className =
+                "error-message";
         }
 
-
-        formMessage.textContent =
-            "Propiedad guardada correctamente.";
-
-        formMessage.className = "success-message";
-
-
-        /* =====================================================
-           LIMPIAR FORMULARIO
-           ===================================================== */
-
-        propertyForm.reset();
-
-        editingPropertyId = null;
-
-        selectedFiles = [];
-
-        propertyImagesInput.value = "";
-
-        propertyImagesPreview.innerHTML = "";
-
-        updateSelectedImagesCount();
-
-        propertyFormTitle.textContent =
-            "Agregar propiedad";
-
-
-        await loadProperties();
-
-
-        setTimeout(() => {
-            propertyFormContainer.classList.remove("active");
-            formMessage.textContent = "";
-            imageUploadMessage.textContent = "";
-        }, 1000);
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        formMessage.textContent =
-            error.message ||
-            "Ocurrió un error al guardar la propiedad.";
-
-        formMessage.className = "error-message";
     }
-
-});
+);
 
 
 /* =========================================================
@@ -802,30 +1145,32 @@ const propertyData = {
    ========================================================= */
 
 const logoutButton =
-    document.getElementById("logout-button");
+    document.getElementById(
+        "logout-button"
+    );
+
 
 if (logoutButton) {
 
-    logoutButton.addEventListener("click", async () => {
+    logoutButton.addEventListener(
+        "click",
+        async () => {
 
-        try {
+            try {
 
-            /*
-             * Si tu Worker no tiene endpoint de logout,
-             * simplemente regresamos al login.
-             */
+                window.location.href =
+                    "/admin.html";
 
-            window.location.href = "/admin.html";
+            } catch (error) {
 
-        } catch (error) {
+                console.error(error);
 
-            console.error(error);
+                window.location.href =
+                    "/admin.html";
+            }
 
-            window.location.href = "/admin.html";
         }
-
-    });
-
+    );
 }
 
 
