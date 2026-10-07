@@ -1476,45 +1476,19 @@ main {
    ========================================================= */
 
 .property-image-item {
-
-    width:
-        120px;
-
-    min-width:
-        120px;
-
-    overflow:
-        hidden;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:
-        10px;
-
-    background:
-        var(--surface-soft);
-
-    box-shadow:
-        0 3px 10px
-        rgba(16, 35, 68, 0.08);
+    width: 90px;
+    min-width: 90px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-soft);
 }
 
-
 .property-image-item img {
-
-    display:
-        block;
-
-    width:
-        120px;
-
-    height:
-        75px;
-
-    object-fit:
-        cover;
+    display: block;
+    width: 90px;
+    height: 60px;
+    object-fit: cover;
 }
 /* =========================================================
    ACCIONES DE IMAGEN
