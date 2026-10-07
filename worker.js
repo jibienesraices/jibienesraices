@@ -835,55 +835,50 @@ export default {
             }
 
 
-            const contentType =
-                request.headers.get(
-                    "Content-Type"
-                ) || "";
+           const formData = await request.formData();
 
+const file = formData.get("image");
 
-            if (
-                !contentType.startsWith(
-                    "image/"
-                )
-            ) {
-                return jsonResponse(
-                    {
-                        error: "El archivo debe ser una imagen"
-                    },
-                    400
-                );
-            }
+if (!(file instanceof File)) {
+    return jsonResponse(
+        {
+            error: "No se recibió ninguna imagen"
+        },
+        400
+    );
+}
 
+const contentType = file.type || "";
 
-            const imageId =
-                crypto.randomUUID();
+if (!contentType.startsWith("image/")) {
+    return jsonResponse(
+        {
+            error: "El archivo debe ser una imagen"
+        },
+        400
+    );
+}
 
+const imageId = crypto.randomUUID();
 
-            const extension =
-                contentType.split("/")[1] ||
-                "jpg";
+const extension =
+    contentType.split("/")[1] || "jpg";
 
+const imageKey =
+    `properties/${propertyId}/${imageId}.${extension}`;
 
-            const imageKey =
-                `properties/${propertyId}/${imageId}.${extension}`;
+const fileBuffer =
+    await file.arrayBuffer();
 
-
-            const file =
-                await request.arrayBuffer();
-
-
-            await env.IMAGES.put(
-                imageKey,
-                file,
-                {
-                    httpMetadata: {
-                        contentType
-                    }
-                }
-            );
-
-
-            const currentImages =
+await env.IMAGES.put(
+    imageKey,
+    fileBuffer,
+    {
+        httpMetadata: {
+            contentType
+        }
+    }
+);            const currentImages =
                 await env.DB
                     .prepare(`
                         SELECT COUNT(*) AS total
