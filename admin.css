@@ -1004,29 +1004,23 @@ main {
 }
 
 
-.image-preview-item {
+.image-preview-item img {
 
-    overflow:
-        hidden;
+    display:
+        block;
 
-    background:
-        white;
+    width:
+        100%;
 
-    padding:
-        8px;
+    height:
+        90px;
 
-    border:
-        1px solid
-        var(--border);
+    object-fit:
+        cover;
 
     border-radius:
-        11px;
-
-    box-shadow:
-        0 4px 12px
-        rgba(16, 35, 68, 0.06);
+        7px;
 }
-
 
 .image-preview-item img {
 
