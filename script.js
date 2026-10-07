@@ -16,277 +16,434 @@ const whatsappNumber = "525583182642";
    CONTENEDOR DE PROPIEDADES
    ========================================================= */
 
-const propertyList =
-    document.getElementById("property-list");
+const propertyList = document.getElementById("property-list");
+
+
+/* =========================================================
+   FUNCIONES AUXILIARES
+   ========================================================= */
+
+/*
+   Convierte cualquier valor en texto seguro para mostrarlo
+   dentro de HTML.
+*/
+
+function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/*
+   Abre WhatsApp con un mensaje preparado.
+*/
+
+function openWhatsApp(message) {
+
+    const whatsappURL =
+        `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+    window.open(
+        whatsappURL,
+        "_blank",
+        "noopener,noreferrer"
+    );
+}
 
 
 /* =========================================================
    CARGAR PROPIEDADES
    ========================================================= */
 
-fetch("/api/properties")
+if (propertyList) {
 
-    .then(response => {
+    fetch("/api/properties")
 
-        if (!response.ok) {
-            throw new Error(
-                "No se pudieron cargar las propiedades."
-            );
-        }
+        .then(response => {
 
-        return response.json();
+            if (!response.ok) {
 
-    })
+                throw new Error(
+                    `Error HTTP ${response.status}`
+                );
 
-    .then(properties => {
+            }
 
-        /* Si no existen propiedades */
+            return response.json();
 
-        if (!properties || properties.length === 0) {
+        })
 
-            propertyList.innerHTML = `
-                <div class="no-properties">
-                    <h3>Actualmente no tenemos propiedades disponibles.</h3>
-                    <p>
-                        Estamos trabajando para ofrecerte
-                        nuevas opciones próximamente.
-                    </p>
-                </div>
-            `;
+        .then(properties => {
 
-            return;
-        }
+            /*
+               Verificar que la respuesta sea un arreglo.
+            */
 
+            if (!Array.isArray(properties)) {
 
-        /* Crear tarjeta para cada propiedad */
+                throw new Error(
+                    "La respuesta del servidor no tiene un formato válido."
+                );
 
-        properties.forEach(property => {
-
-            const card =
-                document.createElement("article");
+            }
 
 
-            /* Primera imagen */
+            /*
+               Si no existen propiedades.
+            */
 
-            const firstImage =
-                property.images &&
-                property.images.length > 0
-                    ? property.images[0]
-                    : "";
+            if (properties.length === 0) {
 
+                propertyList.innerHTML = `
 
-            /* Crear tarjeta */
+                    <div class="no-properties">
 
-            card.innerHTML = `
-
-                <div class="property-image-container">
-
-                    ${
-                        firstImage
-
-                            ? `
-                                <img
-                                    src="${firstImage}"
-                                    alt="${property.title}"
-                                    loading="lazy"
-                                >
-                              `
-
-                            : `
-                                <div class="no-property-image">
-                                    Sin fotografía disponible
-                                </div>
-                              `
-                    }
-
-                </div>
-
-
-                <div class="property-info">
-
-                    <h3>
-                        ${property.title}
-                    </h3>
-
-
-                    <p class="price">
-                        ${property.price}
-                    </p>
-
-
-                    <p>
-                        📍 ${property.location}
-                    </p>
-
-
-                    <p>
-                        ${property.bedrooms} habitaciones
-                        ·
-                        ${property.bathrooms} baños
-                    </p>
-
-
-                    <button
-                        class="details-button"
-                        type="button"
-                    >
-                        Ver información de la propiedad
-                    </button>
-
-
-                    <div class="property-details">
+                        <h3>
+                            Actualmente no tenemos propiedades disponibles.
+                        </h3>
 
                         <p>
-                            ${
-                                property.services.water
-                                    ? "✓ Servicio de agua"
-                                    : "✕ Servicio de agua"
-                            }
-                        </p>
-
-
-                        <p>
-                            ${
-                                property.services.electricity
-                                    ? "✓ Servicio de luz"
-                                    : "✕ Servicio de luz"
-                            }
-                        </p>
-
-
-                        <p>
-                            ${
-                                property.services.deeds
-                                    ? "✓ Escrituras"
-                                    : "✕ Escrituras"
-                            }
-                        </p>
-
-
-                        <p>
-                            ${
-                                property.services.debt
-                                    ? "⚠ Tiene adeudo"
-                                    : "✓ Sin adeudo"
-                            }
+                            Estamos trabajando para ofrecerte
+                            nuevas opciones próximamente.
                         </p>
 
                     </div>
 
+                `;
 
-                    <button
-                        class="whatsapp-button"
-                        type="button"
-                    >
-                        💬 Solicitar información
-                    </button>
+                return;
+            }
+
+
+            /*
+               Crear tarjeta para cada propiedad.
+            */
+
+            properties.forEach(property => {
+
+                createPropertyCard(property);
+
+            });
+
+        })
+
+        .catch(error => {
+
+            console.error(
+                "Error al cargar las propiedades:",
+                error
+            );
+
+
+            propertyList.innerHTML = `
+
+                <div class="no-properties">
+
+                    <h3>
+                        No pudimos cargar las propiedades.
+                    </h3>
+
+                    <p>
+                        Por favor, intenta nuevamente
+                        en unos momentos.
+                    </p>
 
                 </div>
 
             `;
 
-
-            /* =================================================
-               BOTONES
-               ================================================= */
-
-            const detailsButton =
-                card.querySelector(
-                    ".details-button"
-                );
-
-
-            const whatsappButton =
-                card.querySelector(
-                    ".whatsapp-button"
-                );
-
-
-            const propertyImage =
-                card.querySelector(
-                    ".property-image-container"
-                );
-
-
-            /* Abrir información */
-
-            detailsButton.addEventListener(
-                "click",
-                () => {
-
-                    openPropertyModal(property);
-
-                }
-            );
-
-
-            /* Abrir galería al tocar imagen */
-
-            propertyImage.addEventListener(
-                "click",
-                () => {
-
-                    openPropertyModal(property);
-
-                }
-            );
-
-
-            /* Contactar por WhatsApp */
-
-            whatsappButton.addEventListener(
-                "click",
-                () => {
-
-                    const message =
-                        `Hola, me interesa recibir información sobre la propiedad "${property.title}". ¿Podrían ayudarme con más información?`;
-
-const whatsappURL =
-    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-`
-                    window.open(
-                        whatsappURL,
-                        "_blank"
-                    );
-
-                }
-            );
-
-
-            /* Agregar tarjeta */
-
-            propertyList.appendChild(card);
-
         });
 
-    })
+}
 
-    .catch(error => {
 
-        console.error(
-            "Error al cargar las propiedades:",
-            error
+/* =========================================================
+   CREAR TARJETA DE PROPIEDAD
+   ========================================================= */
+
+function createPropertyCard(property) {
+
+    const card =
+        document.createElement("article");
+
+
+    /*
+       Obtener imágenes.
+    */
+
+    const images =
+        Array.isArray(property.images)
+            ? property.images.filter(Boolean)
+            : [];
+
+
+    /*
+       Primera imagen.
+    */
+
+    const firstImage =
+        images.length > 0
+            ? images[0]
+            : "";
+
+
+    /*
+       Servicios.
+    */
+
+    const services =
+        property.services &&
+        typeof property.services === "object"
+            ? property.services
+            : {};
+
+
+    /*
+       Valores seguros.
+    */
+
+    const title =
+        escapeHTML(
+            property.title || "Propiedad disponible"
         );
 
 
-        propertyList.innerHTML = `
+    const price =
+        escapeHTML(
+            property.price || "Precio disponible"
+        );
 
-            <div class="no-properties">
 
-                <h3>
-                    No pudimos cargar las propiedades.
-                </h3>
+    const location =
+        escapeHTML(
+            property.location || "Ubicación no especificada"
+        );
+
+
+    const bedrooms =
+        escapeHTML(
+            property.bedrooms ?? "N/D"
+        );
+
+
+    const bathrooms =
+        escapeHTML(
+            property.bathrooms ?? "N/D"
+        );
+
+
+    /*
+       Crear tarjeta.
+    */
+
+    card.innerHTML = `
+
+        <div class="property-image-container">
+
+            ${
+                firstImage
+
+                    ? `
+
+                        <img
+                            src="${escapeHTML(firstImage)}"
+                            alt="${title}"
+                            loading="lazy"
+                        >
+
+                      `
+
+                    : `
+
+                        <div class="no-property-image">
+                            Sin fotografía disponible
+                        </div>
+
+                      `
+            }
+
+        </div>
+
+
+        <div class="property-info">
+
+            <h3>
+                ${title}
+            </h3>
+
+
+            <p class="price">
+                ${price}
+            </p>
+
+
+            <p>
+                📍 ${location}
+            </p>
+
+
+            <p>
+                ${bedrooms} habitaciones
+                ·
+                ${bathrooms} baños
+            </p>
+
+
+            <button
+                class="details-button"
+                type="button"
+            >
+                Ver información de la propiedad
+            </button>
+
+
+            <div class="property-details">
 
                 <p>
-                    Por favor, intenta nuevamente
-                    en unos momentos.
+                    ${
+                        services.water
+                            ? "✓ Servicio de agua"
+                            : "✕ Servicio de agua"
+                    }
+                </p>
+
+
+                <p>
+                    ${
+                        services.electricity
+                            ? "✓ Servicio de luz"
+                            : "✕ Servicio de luz"
+                    }
+                </p>
+
+
+                <p>
+                    ${
+                        services.deeds
+                            ? "✓ Escrituras"
+                            : "✕ Escrituras"
+                    }
+                </p>
+
+
+                <p>
+                    ${
+                        services.debt
+                            ? "⚠ Tiene adeudo"
+                            : "✓ Sin adeudo"
+                    }
                 </p>
 
             </div>
 
-        `;
 
-    });
+            <button
+                class="whatsapp-button"
+                type="button"
+            >
+                💬 Solicitar información
+            </button>
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       ELEMENTOS DE LA TARJETA
+       ===================================================== */
+
+    const detailsButton =
+        card.querySelector(
+            ".details-button"
+        );
+
+
+    const whatsappButton =
+        card.querySelector(
+            ".whatsapp-button"
+        );
+
+
+    const propertyImage =
+        card.querySelector(
+            ".property-image-container"
+        );
+
+
+    /* =====================================================
+       ABRIR INFORMACIÓN
+       ===================================================== */
+
+    if (detailsButton) {
+
+        detailsButton.addEventListener(
+            "click",
+            () => {
+
+                openPropertyModal(property);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ABRIR GALERÍA AL TOCAR IMAGEN
+       ===================================================== */
+
+    if (propertyImage) {
+
+        propertyImage.addEventListener(
+            "click",
+            () => {
+
+                openPropertyModal(property);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CONTACTAR POR WHATSAPP
+       ===================================================== */
+
+    if (whatsappButton) {
+
+        whatsappButton.addEventListener(
+            "click",
+            () => {
+
+                const message =
+                    `Hola, me interesa recibir información sobre la propiedad "${property.title || "disponible"}". ¿Podrían ayudarme con más información?`;
+
+                openWhatsApp(message);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       AGREGAR TARJETA
+       ===================================================== */
+
+    propertyList.appendChild(card);
+
+}
 
 
 /* =========================================================
@@ -298,18 +455,70 @@ function openPropertyModal(property) {
     let currentImage = 0;
 
 
-    /* Imágenes */
+    /* =====================================================
+       IMÁGENES
+       ===================================================== */
 
     const images =
-        property.images &&
-        property.images.length > 0
-
-            ? property.images
-
+        Array.isArray(property.images)
+            ? property.images.filter(Boolean)
             : [];
 
 
-    /* Crear modal */
+    /* =====================================================
+       SERVICIOS
+       ===================================================== */
+
+    const services =
+        property.services &&
+        typeof property.services === "object"
+            ? property.services
+            : {};
+
+
+    /* =====================================================
+       DATOS SEGUROS
+       ===================================================== */
+
+    const title =
+        escapeHTML(
+            property.title || "Propiedad disponible"
+        );
+
+
+    const price =
+        escapeHTML(
+            property.price || "Precio disponible"
+        );
+
+
+    const location =
+        escapeHTML(
+            property.location || "Ubicación no especificada"
+        );
+
+
+    const bedrooms =
+        escapeHTML(
+            property.bedrooms ?? "N/D"
+        );
+
+
+    const bathrooms =
+        escapeHTML(
+            property.bathrooms ?? "N/D"
+        );
+
+
+    const description =
+        escapeHTML(
+            property.description || ""
+        );
+
+
+    /* =====================================================
+       CREAR MODAL
+       ===================================================== */
 
     const modal =
         document.createElement("div");
@@ -353,17 +562,21 @@ function openPropertyModal(property) {
                     images.length > 0
 
                         ? `
+
                             <img
                                 class="modal-image"
-                                src="${images[0]}"
-                                alt="${property.title}"
+                                src="${escapeHTML(images[0])}"
+                                alt="${title}"
                             >
+
                           `
 
                         : `
+
                             <div class="no-modal-image">
                                 Sin fotografías disponibles
                             </div>
+
                           `
                 }
 
@@ -386,6 +599,7 @@ function openPropertyModal(property) {
                 images.length > 1
 
                     ? `
+
                         <div class="gallery-counter">
 
                             <span
@@ -394,10 +608,10 @@ function openPropertyModal(property) {
                                 1
                             </span>
 
-                            /
-                            ${images.length}
+                            / ${images.length}
 
                         </div>
+
                       `
 
                     : ""
@@ -410,25 +624,25 @@ function openPropertyModal(property) {
 
 
                 <h2>
-                    ${property.title}
+                    ${title}
                 </h2>
 
 
                 <p class="modal-price">
-                    ${property.price}
+                    ${price}
                 </p>
 
 
                 <p>
-                    📍 ${property.location}
+                    📍 ${location}
                 </p>
 
 
                 <p>
-                    ${property.bedrooms}
+                    ${bedrooms}
                     habitaciones
                     ·
-                    ${property.bathrooms}
+                    ${bathrooms}
                     baños
                 </p>
 
@@ -440,7 +654,7 @@ function openPropertyModal(property) {
 
                     <p>
                         ${
-                            property.services.water
+                            services.water
                                 ? "✓ Servicio de agua"
                                 : "✕ Servicio de agua"
                         }
@@ -449,7 +663,7 @@ function openPropertyModal(property) {
 
                     <p>
                         ${
-                            property.services.electricity
+                            services.electricity
                                 ? "✓ Servicio de luz"
                                 : "✕ Servicio de luz"
                         }
@@ -458,7 +672,7 @@ function openPropertyModal(property) {
 
                     <p>
                         ${
-                            property.services.deeds
+                            services.deeds
                                 ? "✓ Escrituras"
                                 : "✕ Escrituras"
                         }
@@ -467,7 +681,7 @@ function openPropertyModal(property) {
 
                     <p>
                         ${
-                            property.services.debt
+                            services.debt
                                 ? "⚠ Tiene adeudo"
                                 : "✓ Sin adeudo"
                         }
@@ -480,12 +694,14 @@ function openPropertyModal(property) {
                 <!-- Descripción -->
 
                 ${
-                    property.description
+                    description
 
                         ? `
+
                             <p class="modal-description">
-                                ${property.description}
+                                ${description}
                             </p>
+
                           `
 
                         : ""
@@ -509,7 +725,9 @@ function openPropertyModal(property) {
     `;
 
 
-    /* Agregar modal */
+    /* =====================================================
+       AGREGAR MODAL AL DOCUMENTO
+       ===================================================== */
 
     document.body.appendChild(modal);
 
@@ -555,15 +773,6 @@ function openPropertyModal(property) {
 
 
     /* =====================================================
-       CONTROL TÁCTIL
-       ===================================================== */
-
-    let touchStartX = 0;
-
-    let touchEndX = 0;
-
-
-    /* =====================================================
        ACTUALIZAR IMAGEN
        ===================================================== */
 
@@ -573,7 +782,9 @@ function openPropertyModal(property) {
             !modalImage ||
             images.length === 0
         ) {
+
             return;
+
         }
 
 
@@ -595,7 +806,11 @@ function openPropertyModal(property) {
        OCULTAR FLECHAS SI SOLO EXISTE UNA IMAGEN
        ===================================================== */
 
-    if (images.length <= 1) {
+    if (
+        images.length <= 1 &&
+        previousButton &&
+        nextButton
+    ) {
 
         previousButton.style.display =
             "none";
@@ -610,67 +825,84 @@ function openPropertyModal(property) {
        IMAGEN ANTERIOR
        ===================================================== */
 
-    previousButton.addEventListener(
-        "click",
-        () => {
+    if (previousButton) {
 
-            if (images.length <= 1) {
-                return;
+        previousButton.addEventListener(
+            "click",
+            () => {
+
+                if (images.length <= 1) {
+
+                    return;
+
+                }
+
+
+                currentImage--;
+
+
+                if (currentImage < 0) {
+
+                    currentImage =
+                        images.length - 1;
+
+                }
+
+
+                updateImage();
+
             }
+        );
 
-
-            currentImage--;
-
-
-            if (currentImage < 0) {
-
-                currentImage =
-                    images.length - 1;
-
-            }
-
-
-            updateImage();
-
-        }
-    );
+    }
 
 
     /* =====================================================
        IMAGEN SIGUIENTE
        ===================================================== */
 
-    nextButton.addEventListener(
-        "click",
-        () => {
+    if (nextButton) {
 
-            if (images.length <= 1) {
-                return;
+        nextButton.addEventListener(
+            "click",
+            () => {
+
+                if (images.length <= 1) {
+
+                    return;
+
+                }
+
+
+                currentImage++;
+
+
+                if (
+                    currentImage >=
+                    images.length
+                ) {
+
+                    currentImage = 0;
+
+                }
+
+
+                updateImage();
+
             }
+        );
 
-
-            currentImage++;
-
-
-            if (
-                currentImage >=
-                images.length
-            ) {
-
-                currentImage = 0;
-
-            }
-
-
-            updateImage();
-
-        }
-    );
+    }
 
 
     /* =====================================================
        SWIPE EN MÓVILES
        ===================================================== */
+
+    let touchStartX = 0;
+
+    let touchEndX = 0;
+
 
     if (modalImage) {
 
@@ -689,6 +921,13 @@ function openPropertyModal(property) {
             "touchend",
             event => {
 
+                if (images.length <= 1) {
+
+                    return;
+
+                }
+
+
                 touchEndX =
                     event.changedTouches[0].screenX;
 
@@ -701,7 +940,9 @@ function openPropertyModal(property) {
                 if (
                     Math.abs(difference) < 50
                 ) {
+
                     return;
+
                 }
 
 
@@ -731,9 +972,7 @@ function openPropertyModal(property) {
                     currentImage--;
 
 
-                    if (
-                        currentImage < 0
-                    ) {
+                    if (currentImage < 0) {
 
                         currentImage =
                             images.length - 1;
@@ -755,17 +994,23 @@ function openPropertyModal(property) {
        CERRAR MODAL
        ===================================================== */
 
-    closeButton.addEventListener(
-        "click",
-        () => {
+    if (closeButton) {
 
-            modal.remove();
+        closeButton.addEventListener(
+            "click",
+            () => {
 
-        }
-    );
+                modal.remove();
+
+            }
+        );
+
+    }
 
 
-    /* Cerrar haciendo clic fuera */
+    /* =====================================================
+       CERRAR HACIENDO CLIC FUERA
+       ===================================================== */
 
     modal.addEventListener(
         "click",
@@ -784,26 +1029,50 @@ function openPropertyModal(property) {
 
 
     /* =====================================================
-       WHATSAPP DESDE EL MODAL
+       CERRAR CON LA TECLA ESC
        ===================================================== */
 
-    modalWhatsapp.addEventListener(
-        "click",
-        () => {
+    function handleEscape(event) {
 
-            const message =
-                `Hola, me interesa recibir información sobre la propiedad "${property.title}". ¿Podrían ayudarme con más información?`;
-                
-const whatsappURL =
-    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-`
-            window.open(
-                whatsappURL,
-                "_blank"
+        if (event.key === "Escape") {
+
+            modal.remove();
+
+            document.removeEventListener(
+                "keydown",
+                handleEscape
             );
 
         }
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        handleEscape
     );
+
+
+    /* =====================================================
+       WHATSAPP DESDE EL MODAL
+       ===================================================== */
+
+    if (modalWhatsapp) {
+
+        modalWhatsapp.addEventListener(
+            "click",
+            () => {
+
+                const message =
+                    `Hola, me interesa recibir información sobre la propiedad "${property.title || "disponible"}". ¿Podrían ayudarme con más información?`;
+
+                openWhatsApp(message);
+
+            }
+        );
+
+    }
 
 }
 
@@ -834,36 +1103,41 @@ const ownerWhatsappButton =
    ABRIR / CERRAR CONTACTO
    ========================================================= */
 
-ownerContactButton.addEventListener(
-    "click",
-    () => {
+if (
+    ownerContactButton &&
+    ownerContactMenu
+) {
 
-        ownerContactMenu.classList.toggle(
-            "active"
-        );
+    ownerContactButton.addEventListener(
+        "click",
+        () => {
 
-    }
-);
+            ownerContactMenu.classList.toggle(
+                "active"
+            );
+
+        }
+    );
+
+}
 
 
 /* =========================================================
    WHATSAPP PARA VENDEDORES
    ========================================================= */
 
-ownerWhatsappButton.addEventListener(
-    "click",
-    () => {
+if (ownerWhatsappButton) {
 
-        const message =
-            "Hola, tengo una propiedad que me interesa vender. Me gustaría recibir información sobre el proceso.";
+    ownerWhatsappButton.addEventListener(
+        "click",
+        () => {
 
-const whatsappURL =
-    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-`
-        window.open(
-            whatsappURL,
-            "_blank"
-        );
+            const message =
+                "Hola, tengo una propiedad que me interesa vender. Me gustaría recibir información sobre el proceso.";
 
-    }
-);
+            openWhatsApp(message);
+
+        }
+    );
+
+}
