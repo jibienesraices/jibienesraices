@@ -10,6 +10,7 @@ const priceInput = document.getElementById("price");
 const locationInput = document.getElementById("location");
 const bedroomsInput = document.getElementById("bedrooms");
 const bathroomsInput = document.getElementById("bathrooms");
+const priorityInput = document.getElementById("priority");
 
 const waterInput = document.getElementById("water");
 const electricityInput = document.getElementById("electricity");
@@ -408,10 +409,12 @@ propertyList.addEventListener("click", async (event) => {
         priceInput.value = formatPrice(property.price);
         locationInput.value = property.location || "";
 
-        bedroomsInput.value = property.bedrooms || 0;
-        bathroomsInput.value = property.bathrooms || 0;
+bedroomsInput.value = property.bedrooms || 0;
+bathroomsInput.value = property.bathrooms || 0;
 
-        waterInput.checked = Boolean(property.water);
+priorityInput.value = property.priority || "B";
+
+waterInput.checked = Boolean(property.water);
         electricityInput.checked = Boolean(property.electricity);
         deedsInput.checked = Boolean(property.deeds);
         debtInput.checked = Boolean(property.debt);
@@ -622,15 +625,17 @@ propertyForm.addEventListener("submit", async (event) => {
         return;
     }
 
-    const propertyData = {
-        title: titleInput.value.trim(),
-        price: price,
-        location: locationInput.value.trim(),
+const propertyData = {
+    title: titleInput.value.trim(),
+    price: price,
+    location: locationInput.value.trim(),
 
-        bedrooms: Number(bedroomsInput.value) || 0,
-        bathrooms: Number(bathroomsInput.value) || 0,
+    bedrooms: Number(bedroomsInput.value) || 0,
+    bathrooms: Number(bathroomsInput.value) || 0,
 
-        water: waterInput.checked ? 1 : 0,
+    priority: priorityInput.value,
+
+    water: waterInput.checked ? 1 : 0,
         electricity: electricityInput.checked ? 1 : 0,
         deeds: deedsInput.checked ? 1 : 0,
         debt: debtInput.checked ? 1 : 0,
