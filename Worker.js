@@ -1,4 +1,4 @@
-﻿async function createSessionToken(password) {
+async function createSessionToken(password) {
     const timestamp = Date.now().toString();
 
     const encoder = new TextEncoder();
@@ -17,7 +17,9 @@
         encoder.encode(timestamp)
     );
 
-    const signatureArray = Array.from(new Uint8Array(signature));
+    const signatureArray = Array.from(
+        new Uint8Array(signature)
+    );
 
     const signatureHex = signatureArray
         .map(byte => byte.toString(16).padStart(2, "0"))
@@ -57,7 +59,9 @@ async function verifySessionToken(token, password) {
     );
 
     const signatureBytes = new Uint8Array(
-        signatureHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16))
+        signatureHex
+            .match(/.{1,2}/g)
+            .map(byte => parseInt(byte, 16))
     );
 
     return await crypto.subtle.verify(
@@ -70,24 +74,32 @@ async function verifySessionToken(token, password) {
 
 
 function jsonResponse(data, status = 200, extraHeaders = {}) {
-    return new Response(JSON.stringify(data), {
-        status,
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            ...extraHeaders
+    return new Response(
+        JSON.stringify(data),
+        {
+            status,
+            headers: {
+                "Content-Type":
+                    "application/json; charset=utf-8",
+                ...extraHeaders
+            }
         }
-    });
+    );
 }
 
 
 function getSessionToken(request) {
-    const cookies = request.headers.get("Cookie") || "";
+    const cookies =
+        request.headers.get("Cookie") || "";
 
-    const sessionCookie = cookies
-        .split(";")
-        .find(cookie =>
-            cookie.trim().startsWith("admin_session=")
-        );
+    const sessionCookie =
+        cookies
+            .split(";")
+            .find(cookie =>
+                cookie
+                    .trim()
+                    .startsWith("admin_session=")
+            );
 
     if (!sessionCookie) return null;
 
@@ -111,23 +123,25 @@ export default {
 
         /*
         ============================================================
-        CONFIGURACIÃ“N
+        CONFIGURACIÓN
         ============================================================
         env.DB     -> D1
         env.IMAGES -> R2
-        env.ASSETS -> archivos estÃ¡ticos
-        env.ADMIN_PASSWORD -> contraseÃ±a del administrador
+        env.ASSETS -> archivos estáticos
+        env.ADMIN_PASSWORD -> contraseña del administrador
         ============================================================
         */
 
-        const sessionToken = getSessionToken(request);
+        const sessionToken =
+            getSessionToken(request);
 
-        const isAuthenticated = await verifySessionToken(
-            sessionToken,
-            env.ADMIN_PASSWORD
-        );
+        const isAuthenticated =
+            await verifySessionToken(
+                sessionToken,
+                env.ADMIN_PASSWORD
+            );
 
-        console.log("JI Bienes RaÃ­ces:", {
+        console.log("JI Bienes Raíces:", {
             method: request.method,
             path: url.pathname,
             authenticated: isAuthenticated
@@ -164,7 +178,8 @@ export default {
 
             try {
 
-                const body = await request.json();
+                const body =
+                    await request.json();
 
                 if (
                     !body ||
@@ -173,14 +188,18 @@ export default {
                     return jsonResponse(
                         {
                             success: false,
-                            message: "ContraseÃ±a requerida"
+                            message:
+                                "Contraseña requerida"
                         },
                         400
                     );
                 }
 
 
-                if (body.password === env.ADMIN_PASSWORD) {
+                if (
+                    body.password ===
+                    env.ADMIN_PASSWORD
+                ) {
 
                     const token =
                         await createSessionToken(
@@ -203,7 +222,8 @@ export default {
                 return jsonResponse(
                     {
                         success: false,
-                        message: "ContraseÃ±a incorrecta"
+                        message:
+                            "Contraseña incorrecta"
                     },
                     401
                 );
@@ -218,7 +238,8 @@ export default {
                 return jsonResponse(
                     {
                         success: false,
-                        message: "Solicitud invÃ¡lida"
+                        message:
+                            "Solicitud inválida"
                     },
                     400
                 );
@@ -233,7 +254,8 @@ export default {
         */
 
         if (
-            url.pathname === "/api/admin/properties" &&
+            url.pathname ===
+                "/api/admin/properties" &&
             request.method === "GET"
         ) {
 
@@ -247,7 +269,9 @@ export default {
             }
 
 
-            const { results: properties } =
+            const {
+                results: properties
+            } =
                 await env.DB
                     .prepare(
                         "SELECT * FROM properties ORDER BY id DESC"
@@ -255,7 +279,9 @@ export default {
                     .all();
 
 
-            const { results: images } =
+            const {
+                results: images
+            } =
                 await env.DB
                     .prepare(
                         "SELECT * FROM property_images ORDER BY property_id, sort_order"
@@ -270,7 +296,8 @@ export default {
                         images
                             .filter(
                                 image =>
-                                    image.property_id === property.id
+                                    image.property_id ===
+                                    property.id
                             )
                             .map(
                                 image =>
@@ -285,13 +312,32 @@ export default {
                         location: property.location,
                         bedrooms: property.bedrooms,
                         bathrooms: property.bathrooms,
-                        water: Boolean(property.water),
-                        electricity: Boolean(property.electricity),
-                        deeds: Boolean(property.deeds),
-                        debt: Boolean(property.debt),
-                        description: property.description,
-                        created_at: property.created_at,
-                        images: propertyImages
+
+                        priority:
+                            property.priority || "B",
+
+                        water:
+                            Boolean(property.water),
+
+                        electricity:
+                            Boolean(
+                                property.electricity
+                            ),
+
+                        deeds:
+                            Boolean(property.deeds),
+
+                        debt:
+                            Boolean(property.debt),
+
+                        description:
+                            property.description,
+
+                        created_at:
+                            property.created_at,
+
+                        images:
+                            propertyImages
                     };
 
                 });
@@ -310,7 +356,8 @@ export default {
         */
 
         if (
-            url.pathname === "/api/admin/properties" &&
+            url.pathname ===
+                "/api/admin/properties" &&
             request.method === "POST"
         ) {
 
@@ -326,7 +373,15 @@ export default {
 
             try {
 
-                const body = await request.json();
+                const body =
+                    await request.json();
+
+
+                const priority =
+                    body.priority === "A" ||
+                    body.priority === "C"
+                        ? body.priority
+                        : "B";
 
 
                 const result =
@@ -338,13 +393,14 @@ export default {
                                 location,
                                 bedrooms,
                                 bathrooms,
+                                priority,
                                 water,
                                 electricity,
                                 deeds,
                                 debt,
                                 description
                             )
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         `)
                         .bind(
                             body.title,
@@ -352,6 +408,7 @@ export default {
                             body.location,
                             body.bedrooms,
                             body.bathrooms,
+                            priority,
                             body.water ? 1 : 0,
                             body.electricity ? 1 : 0,
                             body.deeds ? 1 : 0,
@@ -364,7 +421,9 @@ export default {
                 return jsonResponse(
                     {
                         success: true,
-                        id: result.meta.last_row_id
+                        id:
+                            result.meta
+                                .last_row_id
                     }
                 );
 
@@ -377,7 +436,8 @@ export default {
 
                 return jsonResponse(
                     {
-                        error: "No se pudo crear la propiedad"
+                        error:
+                            "No se pudo crear la propiedad"
                     },
                     500
                 );
@@ -395,7 +455,9 @@ export default {
             url.pathname.startsWith(
                 "/api/admin/properties/"
             ) &&
-            url.pathname.endsWith("/images/primary") &&
+            url.pathname.endsWith(
+                "/images/primary"
+            ) &&
             request.method === "PUT"
         ) {
 
@@ -449,14 +511,17 @@ export default {
             if (!image) {
                 return jsonResponse(
                     {
-                        error: "La imagen no existe"
+                        error:
+                            "La imagen no existe"
                     },
                     404
                 );
             }
 
 
-            const { results: images } =
+            const {
+                results: images
+            } =
                 await env.DB
                     .prepare(`
                         SELECT id
@@ -513,7 +578,9 @@ export default {
             url.pathname.startsWith(
                 "/api/admin/properties/"
             ) &&
-            url.pathname.endsWith("/images") &&
+            url.pathname.endsWith(
+                "/images"
+            ) &&
             request.method === "DELETE"
         ) {
 
@@ -567,7 +634,8 @@ export default {
             if (!image) {
                 return jsonResponse(
                     {
-                        error: "La imagen no existe"
+                        error:
+                            "La imagen no existe"
                     },
                     404
                 );
@@ -634,6 +702,13 @@ export default {
                     await request.json();
 
 
+                const priority =
+                    body.priority === "A" ||
+                    body.priority === "C"
+                        ? body.priority
+                        : "B";
+
+
                 const result =
                     await env.DB
                         .prepare(`
@@ -643,6 +718,7 @@ export default {
                                 location = ?,
                                 bedrooms = ?,
                                 bathrooms = ?,
+                                priority = ?,
                                 water = ?,
                                 electricity = ?,
                                 deeds = ?,
@@ -656,6 +732,7 @@ export default {
                             body.location,
                             body.bedrooms,
                             body.bathrooms,
+                            priority,
                             body.water ? 1 : 0,
                             body.electricity ? 1 : 0,
                             body.deeds ? 1 : 0,
@@ -668,7 +745,8 @@ export default {
 
                 return jsonResponse({
                     success: true,
-                    changes: result.meta.changes
+                    changes:
+                        result.meta.changes
                 });
 
             } catch (error) {
@@ -680,7 +758,8 @@ export default {
 
                 return jsonResponse(
                     {
-                        error: "No se pudo actualizar la propiedad"
+                        error:
+                            "No se pudo actualizar la propiedad"
                     },
                     500
                 );
@@ -730,14 +809,17 @@ export default {
             if (!property) {
                 return jsonResponse(
                     {
-                        error: "La propiedad no existe"
+                        error:
+                            "La propiedad no existe"
                     },
                     404
                 );
             }
 
 
-            const { results: images } =
+            const {
+                results: images
+            } =
                 await env.DB
                     .prepare(`
                         SELECT image_url
@@ -796,7 +878,9 @@ export default {
             url.pathname.startsWith(
                 "/api/admin/properties/"
             ) &&
-            url.pathname.endsWith("/images") &&
+            url.pathname.endsWith(
+                "/images"
+            ) &&
             request.method === "POST"
         ) {
 
@@ -828,57 +912,80 @@ export default {
             if (!property) {
                 return jsonResponse(
                     {
-                        error: "La propiedad no existe"
+                        error:
+                            "La propiedad no existe"
                     },
                     404
                 );
             }
 
 
-           const formData = await request.formData();
+            const formData =
+                await request.formData();
 
-const file = formData.get("image");
+            const file =
+                formData.get("image");
 
-if (!(file instanceof File)) {
-    return jsonResponse(
-        {
-            error: "No se recibió ninguna imagen"
-        },
-        400
-    );
-}
 
-const contentType = file.type || "";
+            if (!(file instanceof File)) {
+                return jsonResponse(
+                    {
+                        error:
+                            "No se recibió ninguna imagen"
+                    },
+                    400
+                );
+            }
 
-if (!contentType.startsWith("image/")) {
-    return jsonResponse(
-        {
-            error: "El archivo debe ser una imagen"
-        },
-        400
-    );
-}
 
-const imageId = crypto.randomUUID();
+            const contentType =
+                file.type || "";
 
-const extension =
-    contentType.split("/")[1] || "jpg";
 
-const imageKey =
-    `properties/${propertyId}/${imageId}.${extension}`;
+            if (
+                !contentType.startsWith(
+                    "image/"
+                )
+            ) {
+                return jsonResponse(
+                    {
+                        error:
+                            "El archivo debe ser una imagen"
+                    },
+                    400
+                );
+            }
 
-const fileBuffer =
-    await file.arrayBuffer();
 
-await env.IMAGES.put(
-    imageKey,
-    fileBuffer,
-    {
-        httpMetadata: {
-            contentType
-        }
-    }
-);            const currentImages =
+            const imageId =
+                crypto.randomUUID();
+
+
+            const extension =
+                contentType.split("/")[1] ||
+                "jpg";
+
+
+            const imageKey =
+                `properties/${propertyId}/${imageId}.${extension}`;
+
+
+            const fileBuffer =
+                await file.arrayBuffer();
+
+
+            await env.IMAGES.put(
+                imageKey,
+                fileBuffer,
+                {
+                    httpMetadata: {
+                        contentType
+                    }
+                }
+            );
+
+
+            const currentImages =
                 await env.DB
                     .prepare(`
                         SELECT COUNT(*) AS total
@@ -925,7 +1032,7 @@ await env.IMAGES.put(
 
         /*
         ============================================================
-        API PÃšBLICA - OBTENER IMAGEN DESDE R2
+        API PÚBLICA - OBTENER IMAGEN DESDE R2
         ============================================================
         */
 
@@ -968,7 +1075,9 @@ await env.IMAGES.put(
             }
 
 
-            const headers = new Headers();
+            const headers =
+                new Headers();
+
 
             image.writeHttpMetadata(
                 headers
@@ -998,13 +1107,13 @@ await env.IMAGES.put(
 
         /*
         ============================================================
-        API PÃšBLICA - PROPIEDADES
+        API PÚBLICA - PROPIEDADES
         ============================================================
         */
 
         if (
             url.pathname ===
-            "/api/properties" &&
+                "/api/properties" &&
             request.method === "GET"
         ) {
 
@@ -1012,9 +1121,18 @@ await env.IMAGES.put(
                 results: properties
             } =
                 await env.DB
-                    .prepare(
-                        "SELECT * FROM properties ORDER BY id DESC"
-                    )
+                    .prepare(`
+                        SELECT *
+                        FROM properties
+                        ORDER BY
+                            CASE priority
+                                WHEN 'A' THEN 1
+                                WHEN 'B' THEN 2
+                                WHEN 'C' THEN 3
+                                ELSE 4
+                            END,
+                            id DESC
+                    `)
                     .all();
 
 
@@ -1046,11 +1164,14 @@ await env.IMAGES.put(
 
                     return {
 
-                        id: property.id,
+                        id:
+                            property.id,
 
-                        title: property.title,
+                        title:
+                            property.title,
 
-                        price: property.price,
+                        price:
+                            property.price,
 
                         location:
                             property.location,
@@ -1060,6 +1181,9 @@ await env.IMAGES.put(
 
                         bathrooms:
                             property.bathrooms,
+
+                        priority:
+                            property.priority || "B",
 
                         description:
                             property.description,
