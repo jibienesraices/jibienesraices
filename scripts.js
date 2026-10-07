@@ -244,7 +244,6 @@ fetch("/api/properties")
 const whatsappURL =
     `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 `
-
                     window.open(
                         whatsappURL,
                         "_blank"
@@ -794,13 +793,10 @@ function openPropertyModal(property) {
 
             const message =
                 `Hola, me interesa recibir información sobre la propiedad "${property.title}". ¿Podrían ayudarme con más información?`;
-
-
+                
 const whatsappURL =
     `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 `
-
-
             window.open(
                 whatsappURL,
                 "_blank"
@@ -861,12 +857,9 @@ ownerWhatsappButton.addEventListener(
         const message =
             "Hola, tengo una propiedad que me interesa vender. Me gustaría recibir información sobre el proceso.";
 
-
 const whatsappURL =
     `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 `
-
-
         window.open(
             whatsappURL,
             "_blank"
