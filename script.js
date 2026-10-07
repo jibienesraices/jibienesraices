@@ -11,6 +11,7 @@
 // Número de WhatsApp de JI Bienes Raíces
 const whatsappNumber = "525583182642";
 
+const paperworkWhatsappNumber = "525525087099";
 
 /* =========================================================
    CONTENEDOR DE PROPIEDADES
@@ -58,7 +59,22 @@ function openWhatsApp(message) {
         "noopener,noreferrer"
     );
 }
+/*
+   Abre el WhatsApp para trámites
+   con un número diferente.
+*/
 
+function openPaperworkWhatsApp(message) {
+
+    const whatsappURL =
+        `https://wa.me/${paperworkWhatsappNumber}?text=${encodeURIComponent(message)}`;
+
+    window.open(
+        whatsappURL,
+        "_blank",
+        "noopener,noreferrer"
+    );
+}
 
 /* =========================================================
    CARGAR PROPIEDADES
@@ -1136,6 +1152,30 @@ if (ownerWhatsappButton) {
                 "Hola, tengo una propiedad que me interesa vender. Me gustaría recibir información sobre el proceso.";
 
             openWhatsApp(message);
+
+        }
+    );
+
+}/* =========================================================
+   WHATSAPP PARA TRÁMITES
+   ========================================================= */
+
+const paperworkWhatsappButton =
+    document.getElementById(
+        "paperwork-whatsapp-button"
+    );
+
+
+if (paperworkWhatsappButton) {
+
+    paperworkWhatsappButton.addEventListener(
+        "click",
+        () => {
+
+            const message =
+                "Hola, necesito ayuda con un trámite relacionado con una propiedad. Me gustaría recibir información.";
+
+            openPaperworkWhatsApp(message);
 
         }
     );
